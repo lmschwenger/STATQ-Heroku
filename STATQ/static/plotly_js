@@ -1,0 +1,32 @@
+(function() {
+
+var gd1 = document.getElementById('gd1');
+var gd2 = document.getElementById('gd2');   
+
+var data = [{
+    type: 'bar',
+    x: [1, 2, 3, 4],
+    y: [5, 10, 2, 8],
+     
+}];
+    
+var layout = {
+   title: 'fills the parent container',
+    autosize: true,
+    margin: {
+        "b":25,
+        "l":25,
+        "r":25,
+        "t":30,
+    }
+}
+    
+Plotly.plot(gd1, data, layout);
+Plotly.plot(gd2, data, layout);
+
+window.onresize = function() {
+   Plotly.Plots.resize(gd1);
+    Plotly.Plots.resize(gd2);
+};
+
+})();

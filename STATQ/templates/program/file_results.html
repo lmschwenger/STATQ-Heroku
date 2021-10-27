@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+{% block content %}   
+    <ul class="nav nav-pills" style="background-color: white; border-radius: .25vw">
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Front">Fil info</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasondata">Sæson-værdier</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rawdata">Målinger</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div id="Front" class="tab-pane fade" style="background-color: rgba(255,255,255, .95); padding: .5vh 1vw; border: 1px solid #dddddd; border-radius: .25vw;">
+          {% for heading,value in infolist %}
+            
+            <p style="font-size: 1vw"><b>{{ heading }}:</b> {{ value }}</p>
+          {% endfor %}
+      </div>
+      <div id="rawdata" class="tab-pane fade"> 
+        <div id="rawplot" style="border-radius: 0.25vw">
+            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+            <script type='text/javascript'>
+              var graphs = {{graphJSONraw | safe}};
+              var layout = { autosize: true };
+              var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
+              Plotly.setPlotConfig(config)
+              Plotly.plot('rawplot', graphs, layout, config );
+            </script> 
+        </div>  
+      </div>
+      <div id="seasondata" class="tab-pane fade" style="">
+        <div id="seasonplot" style="">
+          {% if not graphJSONseason %}
+
+            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Sæson-plot kun til hydrometriske data<h1>
+          {% else %}
+            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+            <script type='text/javascript'>
+              var graphs = {{graphJSONseason | safe}};
+              var layout = { autosize: true };
+              var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
+              Plotly.setPlotConfig(config)
+              Plotly.plot('seasonplot', graphs, layout, config );
+            </script> 
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  {% endblock content %}
+
+

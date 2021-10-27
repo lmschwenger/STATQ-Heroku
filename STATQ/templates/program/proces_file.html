@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+    <div class="content-section" style="">
+                <legend class="border-bottom" style="font-size: 3.5vmin; margin-bottom: 0">Filer</legend>
+
+        <form method="POST" action="" enctype="multipart/form-data" style="display: flex; margin-bottom: 3vh; margin-right: .5vw">   
+
+            <div class="file-drop-area" style="">
+                <span class="fake-btn">Vælg fil</span>
+                <span class="file-msg">Eller træk filen ind i feltet</span>
+                <input class="file-input" type="file" name="myFile">
+            </div>
+            <a style="position: relative; top: 0vh; left: 0.5vw; right: 1vw; ">
+                <input type="submit" style="height: 100%; border-radius: 0.5vw" value="Upload" onclick="window.location.href='{{ url_for('program.upload_file', filename=myFile) }}'">
+            </a>
+        </form>
+        {% if files  %}
+            {% for file in files %}   
+                        <legend class="file-boxes">{{ file }}
+                            <button type="button" style="width:  4vw; height: 4vh; font-size:  1vmin; float:right"  onclick="window.location.href='{{ url_for('program.proces_file', filename=file) }}'" class = "btn btn-primary" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                                </svg>
+                            </button>
+                            <button class="btn btn-danger" style="width:  4vw; height: 4vh; font-size:  1vmin; float: right" onclick="window.location.href='{{ url_for('program.delete_file', filename=file) }}'">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
+                                <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
+                                </svg>
+                            </button>
+                        </legend>
+                        
+
+
+
+                        <div class="col align-self-end">
+
+                        </div>
+                        <div class="row">
+                            <div class="col align-self-end">
+
+                            </div>
+                        </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+</body>
+{% endblock content %}
