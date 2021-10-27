@@ -2,7 +2,9 @@ import os
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL') or 'sqlite:///site.db'
+    
+    #SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    
     FILE_UPLOADS = os.getcwd()+'static/files'
     ALLOWED_FILE_EXTENSIONS = ["CSV", "TXT"]
     MAIL_SERVER = 'smtp.googlemail.com'
