@@ -6,7 +6,7 @@
 
         <form method="POST" action="" enctype="multipart/form-data" style="display: flex; margin-bottom: 3vh; margin-right: .5vw">   
 
-            <div class="file-drop-area" id="file-drop-area-id" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)" ondrop="drop(event)" ondragover="allowDrop(event)">
+            <div class="file-drop-area" id="file-drop-area-id">
                 <span class="fake-btn">Vælg fil</span>
                 <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
                 <input id="fil-holder" class="file-input" type="file" name="myFile">
@@ -35,20 +35,14 @@
     </div>
 
     <script>
-    function dragEnter(event) {
-      if ( event.target.className == "file-drop-area" ) {
-      }
-    }
-    function allowDrop(event) {
-      event.preventDefault();
-    }
-    function dragLeave(event) {
-      if ( event.target.className == "file-drop-area" ) {
-        event.target.style.border = "";
-      }
-    }
+    $(document).ready(function(){
+        $("#fil-holder").on('change',function(){
+            document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;            
+        });
+    });
     function drop(event) {
-      document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
+        event.preventDefault();
+        document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
     }
     </script>
 </body>
