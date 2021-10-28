@@ -174,7 +174,7 @@ span.front:nth-child(7) {
 
 .site-header .navbar-nav .nav-link {
 
-  color: #cbd5db;
+  color: white;
 }
 
 .site-header .navbar-nav .nav-link:hover {
@@ -213,13 +213,13 @@ span.front:nth-child(7) {
   font-size: 2.5vw;
 
 }
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@500;900&display=swap');
-</style>
 a.sideheader {
+
   color: white;
 }
-
+a.side {
+  color: white;
+}
 
 div.sidebar {
   position: fixed;
@@ -227,6 +227,7 @@ div.sidebar {
   width: 100vw;
   height: 7.8vh;
   top: 0vh;
+  color: white;
   position: fixed;
   border-top-right-radius: 0.25vw;
   border-bottom-right-radius: 0.25vw;
@@ -239,8 +240,21 @@ div.sidebar-header {
   font-family: Lato;
   color: white;
   font-size: 2.5vw;
-  top: .0vh;
-  left: 15vw;
+  top: -.0vh;
+  left: 0vw;
+  background: rgb(176,171,255);
+  background: linear-gradient(60deg, rgba(0,0,0,.0) 00%, rgba(0,0,0,0) 74.5%, rgba(255,255,255,1) 75%, rgba(192,255,252,0) 75.5%);
+  padding-top: -.10vh;
+  padding-left: 5vw;
+  padding-right: 10vw;
+  border-radius: 0vw;
+}
+div.sidebar-header:hover {
+  transition-delay: 1s; /* delays for 1 second */
+  -webkit-transition-delay: 1s; /* for Safari & Chrome */ 
+  background: linear-gradient(60deg, rgba(0,0,0,1) 00%, rgba(0,0,0,1) 74.5%, rgba(255,255,255,1) 75%, rgba(192,255,252,0) 75.5%);
+  transition-timing-function: ease-in-out;
+  transition-duration: .21s;  
 }
 div.sidebar-content {
   top: .25vh;

@@ -15,23 +15,21 @@
     {% endif %}
     
 </head>
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100&display=swap');
-</style>
+
 <body class="bg-image">
     <div class="sidebar">
       <li class="nav nav-pills" style="gap: 5vw; margin-top: 2vh; margin-left: 22vw">
-        <div class="sidebar-header" style="font-family: Lato">
+        <div class="sidebar-header">
           <a class="sideheader" href="{{ url_for('main.home') }}">
             STATQ
           </a>
         </div><br>
-        <div class="sidebar-content" style="font-family: Lato">
+        <div class="sidebar-content">
           <a class="side" href="{{ url_for('program.kom_godt_i_gang') }}">
             Kom godt i gang
           </a>
         </div>
-        <div class="sidebar-content" style="font-family: Lato">
+        <div class="sidebar-content">
           <a class="side" href="{{ url_for('program.your_files') }}">
               Filer
           </a>
