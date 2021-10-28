@@ -62,10 +62,8 @@ def upload_file():
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
     filenames=[]
     for objects in files:
-        filenames.append(objects.key)
-        print(filenames[-1])
-        print(str(current_user.username)+'/')
-        filenames[-1].removeprefix(str(current_user.username)+'/')
+        filenames.append(str(objects.key))
+        filenames[-1].replace(str(current_user.username)+'/','')
     user_folder = current_user.username+'/'
 
     if request.files:
