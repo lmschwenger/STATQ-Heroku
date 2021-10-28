@@ -12,48 +12,11 @@ from werkzeug.utils import secure_filename
 from STATQ.program.forms import UploadFileForm, ProcesFileForm
 from STATQ.program.utils import (parse_data, 
                                         plotly_hydro, plotly_kemi, plotly_season)
-program = Blueprint('program', __name__)
 from STATQ import s3
 import io
 import boto3
-# @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
-# @login_required
-# def upload_file():
-#     datakilder = ['Vandportalen', 'Oda for alle', 'Danmarks Miljøportal']
-#     user_path = current_app.root_path+'/static/files/'+current_user.username+'/'
-#     files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
-#     filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
-#     if request.files:
-#         file = request.files['myFile']
-#         if file.filename == "":
-#             flash("Filen skal have et navn", 'danger')
-#             return redirect(request.url)
 
-#         if not allowed_filetype(file.filename):
-#             flash("Filtype er ikke understøttet", 'danger')
-#             return redirect(request.url)
-
-#         else:
-#             filename = secure_filename(file.filename)
-
-#         random_hex = secrets.token_hex(8)
-#         _, f_ext = os.path.splitext(file.filename)
-#         file_fn = random_hex + f_ext
-#         user_path = current_app.root_path+'/static/files/'+current_user.username+'/'
-#         if os.path.exists(user_path):
-#             file_path = os.path.join(user_path, filename)
-#             file.save(file_path)
-#         else:
-#             os.mkdir(user_path)
-#             file_path = os.path.join(user_path, filename)
-#             file.save(file_path)
-
-#         flash("Fil er uploadet", 'success')
-#         files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
-#         filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
-#         return redirect(url_for('program.your_files'))
-
-#     return render_template('program/proces_file.html', datakilder=datakilder, files=files)
+program = Blueprint('program', __name__)
 
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
@@ -98,25 +61,11 @@ def your_files():
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
-# @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
-# @login_required
-# def your_files():
-#     current_user.username+'/'
-#     if not os.path.exists(user_path):
-#         os.mkdir(user_path)        
-#     files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
-#     filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
-#     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
-
-
-
 
 @program.route('/StatQ/dine-filer/<string:filename>/slet-fil')
 @login_required
 def delete_file(filename):
-    filepath = current_app.root_path+'/static/files/'+current_user.username+'/'+filename
-    #filepath=os.path.join(user_path,filename)
-    os.remove(filepath)
+    s3.delete_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username)+'/'+str(filename))
     flash(str(filename)+" er blevet slettet", 'success')
     return redirect(url_for('program.your_files'))   
 
@@ -124,13 +73,7 @@ def delete_file(filename):
 @login_required
 def proces_file(filename):
     form=ProcesFileForm
-    s3_resource = boto3.resource('s3')
-    my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username)+'/'+str(filename))
-    #file = my_bucket.objects.filter(Prefix=str(current_user.username)+"/"+str(filename))
-    # if os.path.getsize(file) == 0:
-    #     flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
-    #     return redirect(url_for('program.your_files'))
     df = parse_data(io.BytesIO(file['Body'].read()))
     if isinstance(df, str):
         flash(df, 'danger')
@@ -165,13 +108,6 @@ def kom_godt_i_gang():
 @login_required
 def help():
     return render_template('program/help.html')
-
-
-@program.route('/StatQ/plot', methods=['GET', 'POST'])
-def watch_plot():
-    plotstr = plot_rawdata([1,2,3],[5,10,15])
-    return plotstr
-
 
 def allowed_filetype(filename):
     if not "." in filename:
