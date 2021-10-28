@@ -29,3 +29,4 @@ SQLAlchemy==1.4.26
 tenacity==8.0.1
 Werkzeug==2.0.2
 WTForms==2.3.3
+boto3==1.19.5
