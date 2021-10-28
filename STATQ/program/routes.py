@@ -63,7 +63,7 @@ def upload_file():
     filenames=[]
     for objects in files:
         obj = objects.key
-        obj.removeprefix(str(current_user.username)+'/')
+        obj = obj.removeprefix(str(current_user.username)+'/')
         filenames.append(obj)
     user_folder = current_user.username+'/'
 
