@@ -59,9 +59,9 @@ import boto3
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    s3_resource = boto3.resource('s3')
-    my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
+    # s3_resource = boto3.resource('s3')
+    # my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
+    # files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
 
     user_folder = current_user.username+'/'
 
@@ -77,10 +77,11 @@ def upload_file():
 
         else:
             filename = secure_filename(file.filename)
-
-        random_hex = secrets.token_hex(8)
-        _, f_ext = os.path.splitext(file.filename)
-        s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
+        try:
+            s3.upload_fileobj(file, 'statq-bucket', str(user_folder)+str(filename))
+        except Exception as e:
+            flash("Noget gik galt: "+e, 'danger')
+        #s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
 
@@ -93,15 +94,15 @@ def your_files():
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
-# @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
-# @login_required
-# def your_files():
-#     current_user.username+'/'
-#     if not os.path.exists(user_path):
-#         os.mkdir(user_path)        
-#     files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
-#     filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
-#     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
+@program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
+@login_required
+def your_files():
+    current_user.username+'/'
+    if not os.path.exists(user_path):
+        os.mkdir(user_path)        
+    files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
+    filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
+    return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
 
 
