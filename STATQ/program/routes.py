@@ -126,7 +126,7 @@ def proces_file(filename):
     form=ProcesFileForm
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), key=str(current_user.username)+'/'+str(filename))
+    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username)+'/'+str(filename))
     #file = my_bucket.objects.filter(Prefix=str(current_user.username)+"/"+str(filename))
     # if os.path.getsize(file) == 0:
     #     flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
