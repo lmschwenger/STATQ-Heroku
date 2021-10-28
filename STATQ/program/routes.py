@@ -80,7 +80,7 @@ def upload_file():
 
         random_hex = secrets.token_hex(8)
         _, f_ext = os.path.splitext(file.filename)
-        s3_resource.meta.client.upload_file(str(file), 'statq-bucket',str(user_folder)+str(filename))
+        s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
 
