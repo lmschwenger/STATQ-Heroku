@@ -61,7 +61,7 @@ import boto3
 def upload_file():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    files = my_bucket.objects.all()
+    files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
 
     user_folder = current_user.username+'/'
 
@@ -80,7 +80,7 @@ def upload_file():
 
         random_hex = secrets.token_hex(8)
         _, f_ext = os.path.splitext(file.filename)
-        s3_resource.meta.client.upload_file(file, 'statq-bucket',str(user_folder)+str(filename))
+        s3_resource.meta.client.upload_file(str(file), 'statq-bucket',str(user_folder)+str(filename))
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
 
@@ -119,12 +119,13 @@ def delete_file(filename):
 @login_required
 def proces_file(filename):
     form=ProcesFileForm
-    user_path = current_app.root_path+'/static/files/'+current_user.username
-    file_path = os.path.join(user_path+'/', filename)
-    if os.path.getsize(file_path) == 0:
+    s3_resource = boto3.resource('s3')
+    my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
+    file = my_bucket.objects.filter(Prefix=str(current_user.username)+"/"+str(filename))
+    if os.path.getsize(file) == 0:
         flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
         return redirect(url_for('program.your_files'))
-    df = parse_data(file_path)
+    df = parse_data(file)
     if isinstance(df, str):
         flash(df, 'danger')
         return redirect(url_for('program.your_files'))
