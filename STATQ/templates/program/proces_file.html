@@ -7,15 +7,14 @@
         <form method="POST" action="" enctype="multipart/form-data" style="display: flex; margin-bottom: 3vh; margin-right: .5vw">   
 
             <div class="file-drop-area" style="">
-                <span class="fake-btn">Vælg fil</span>
+                <span class="fake-btn" ondrop="change_span()">Vælg fil</span>
                 <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
                 <input id="fil-holder" class="file-input" type="file" name="myFile">
                 <script>
-                        var span = document.getElementById("Span-id");
-                        var filnavn = document.getElementById("fil-holder")
-                        if(filnavn.value != ""){
-                                span.innerHTML = filnavn;
-                        }         
+                        function change_span() {
+                            var span = document.getElementById("Span-id");
+                            span.innerHTML = filnavn;
+                        }  
                 </script>
             </div>
             <a style="position: relative; top: 0vh; left: 0.5vw; right: 1vw; ">
