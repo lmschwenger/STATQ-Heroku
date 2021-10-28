@@ -17,5 +17,5 @@ def send_reset_email(user):
     Hvis du ikke fremsatte denne forespørgsel, ignorér blot denne mail.
 
     SR Batymetri
-'''
+    '''
     mail.send(msg)
