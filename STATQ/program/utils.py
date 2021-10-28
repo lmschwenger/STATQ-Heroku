@@ -10,7 +10,7 @@ import pandas as pd
 def parse_data(file_path):
     try:
         df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
-    except EmptyDataError:
+    except pandas.errors.EmptyDataError:
         return 'Filen kan ikke læses (Fejlkode 0)'
     if 'Dato' in list(df.columns):
         DateName = 'Dato'
