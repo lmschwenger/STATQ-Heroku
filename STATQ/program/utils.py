@@ -8,8 +8,10 @@ import plotly.graph_objects as go
 import pandas as pd
 
 def parse_data(file_path):
-    
-    df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
+    try:
+        df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
+    except EmptyDataError:
+        return 'Filen kan ikke læses (Fejlkode 0)'
     if 'Dato' in list(df.columns):
         DateName = 'Dato'
     elif 'Startdato' in list(df.columns):
