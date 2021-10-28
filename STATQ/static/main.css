@@ -254,16 +254,27 @@ div.sidebar-content {
  /*Trigger Button*/
 .login-trigger {
   position: absolute;
-  font-weight: bold;
+
   font-size: 1vw;
-  color: black;
-  background: linear-gradient(90deg, rgba(3,0,54,1) 0%, rgba(0,86,169,1) 44%, rgba(0,86,169,1) 61%, rgba(3,0,54,1) 100%);
-  padding: 0.75vh 1.5vw;
-  border-radius: 0.5vw;
+  color: white;
+  background-image: transparent;
+  border-radius: 0.0vw;
+  border-width: 1vmin;
+  border: 0.10vw solid white;
+  line-height: 1em;
+  padding: 0.75vh 1vw;
+  text-align: center;
   top: 2vh;
   left: 92vw;
   width: 7vw;
   z-index: 1000;
+}
+
+.login-trigger:hover {
+  background: black;
+  color: white;
+  border: 0.15vw solid black;
+  transition-duration: .21s;  
 }
 .login-trigger-row {
   top: 2vh;  

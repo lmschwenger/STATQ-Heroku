@@ -56,7 +56,7 @@ def plotly_hydro(df):
         mode='lines+markers',
         marker=dict( color='black', size=8, line= dict( color='black', width=2 ))))
     fig.update_xaxes(title_text="")
-    fig.update_layout(autosize=True)
+    fig.update_layout(autosize=True, title=df['ObservationsStedNavn'].iloc[0])
     fig.data = (fig.data[1],fig.data[0])
     # fig.update_traces(marker=dict(size=10, opacity=0.75,
     #                               line=dict(width=1.5, color='black')))
@@ -70,7 +70,7 @@ def plotly_kemi(df):
         title=df['ObservationsStedNavn'].iloc[0],
         labels={'Parameter'+'Enhed'}
         )
-    fig.update_layout(autosize=True)
+    fig.update_layout(autosize=True, title=df['ObservationsStedNavn'].iloc[0])
     fig.update_xaxes(title_text="")
     fig.update_yaxes(title_text="Værdi")
     #fig.update_layout(barmode='group')
