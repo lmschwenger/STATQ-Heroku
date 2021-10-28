@@ -13,7 +13,7 @@ div.file-drop-area {
   transition: 0.2s;
 }
 div.file-drop-area:hover {
-  background-color:  rgba(0, 0, 0, 0.7);
+  background-color:  rgba(0, 0, 0, 0.3);
 }
 
 div.bg-image {

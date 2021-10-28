@@ -6,14 +6,18 @@
 
         <form method="POST" action="" enctype="multipart/form-data" style="display: flex; margin-bottom: 3vh; margin-right: .5vw">   
 
-            <div class="file-drop-area" style="">
-                <span class="fake-btn" ondrop="change_span()">Vælg fil</span>
+            <div class="file-drop-area" style="" ondrop="change_span()" ondragenter="dropevent(event)">
+                <span class="fake-btn">Vælg fil</span>
                 <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
                 <input id="fil-holder" class="file-input" type="file" name="myFile">
                 <script>
                         function change_span() {
-                            var span = document.getElementById("Span-id");
-                            span.innerHTML = filnavn;
+                            document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").name;
+                        }
+                        function dropevent(event) {
+                            event.preventDef{
+                                event.target.style.backgroundColor = rgba(0, 0, 0, 0.4);
+                            }
                         }  
                 </script>
             </div>
