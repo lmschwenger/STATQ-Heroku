@@ -131,7 +131,7 @@ def proces_file(filename):
     # if os.path.getsize(file) == 0:
     #     flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
     #     return redirect(url_for('program.your_files'))
-    df = parse_data(file)
+    df = parse_data(io.BytesIO(file['Body'].read()))
     if isinstance(df, str):
         flash(df, 'danger')
         return redirect(url_for('program.your_files'))
