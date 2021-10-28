@@ -50,6 +50,7 @@
       }
     }
     function drop(event) {
+      event.preventDefault();
       document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files;
       document.getElementById("file-drop-area-id").style.backgroundColor = "rgba(0, 0, 0, 0)";
       document.getElementById("file-drop-area-id").style.border = "0.05vw dashed rgba(0, 0, 0, 0.4)";
