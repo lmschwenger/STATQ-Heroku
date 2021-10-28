@@ -256,8 +256,8 @@ div.sidebar-content {
   position: absolute;
   font-weight: bold;
   font-size: 1vw;
-  color: #001B8A;
-  background: linear-gradient(to bottom right, #fff, #00C9D3);
+  color: black;
+  background: linear-gradient(90deg, rgba(3,0,54,1) 0%, rgba(0,86,169,1) 44%, rgba(0,86,169,1) 61%, rgba(3,0,54,1) 100%);
   padding: 0.75vh 1.5vw;
   border-radius: 0.5vw;
   top: 2vh;

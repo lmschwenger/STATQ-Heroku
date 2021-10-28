@@ -6,10 +6,10 @@
 
         <form method="POST" action="" enctype="multipart/form-data" style="display: flex; margin-bottom: 3vh; margin-right: .5vw">   
 
-            <div class="file-drop-area" id="file-drop-area-id" ondrop="changename()">
-                <span class="fake-btn" ondrop="changename()">Vælg fil</span>
-                <span id="Span-id" class="file-msg" ondrop="changename()">Eller træk filen ind i feltet</span>
-                <input id="fil-holder" class="file-input" type="file" name="myFile" ondrop="changename()" onclick="changename()">
+            <div class="file-drop-area" id="file-drop-area-id">
+                <span class="fake-btn">Vælg fil</span>
+                <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
+                <input id="fil-holder" class="file-input" type="file" name="myFile">
             </div>
             <a style="position: relative; top: 0vh; left: 0.5vw; right: 1vw; ">
                 <input type="submit" style="height: 100%; border-radius: 0.5vw" value="Upload" onclick="window.location.href='{{ url_for('program.upload_file', filename=myFile) }}'">
