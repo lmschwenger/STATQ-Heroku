@@ -60,7 +60,9 @@ def upload_file():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
-    files.rstrip(str(current_user.username)+"/")
+    filenames=[]
+    for objects in files:
+        filenames.append(objects)
     user_folder = current_user.username+'/'
 
     if request.files:
@@ -83,7 +85,7 @@ def upload_file():
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
 
-    return render_template('program/proces_file.html', files=files)
+    return render_template('program/proces_file.html', files=files, filenames=filenames)
 
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
