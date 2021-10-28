@@ -10,10 +10,10 @@ import pandas as pd
 def parse_data(file_path):
     
     df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
-        if 'Dato' in list(df.columns):
-            DateName = 'Dato'
-        elif 'Startdato' in list(df.columns):
-            DateName = 'Startdato'            
+    if 'Dato' in list(df.columns):
+        DateName = 'Dato'
+    elif 'Startdato' in list(df.columns):
+        DateName = 'Startdato'            
     try:
         df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
     except ValueError:
