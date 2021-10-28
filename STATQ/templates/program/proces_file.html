@@ -30,18 +30,6 @@
                                 </svg>
                             </button>
                         </legend>
-                        
-
-
-
-                        <div class="col align-self-end">
-
-                        </div>
-                        <div class="row">
-                            <div class="col align-self-end">
-
-                            </div>
-                        </div>
             {% endfor %}
         {% endif %}
     </div>
@@ -50,7 +38,7 @@
     function dragEnter(event) {
       if ( event.target.className == "file-drop-area" ) {
         event.target.style.border = "3px dotted red";
-        document.getElementById("file-drop-area-id").style.backgroundColor = rgba(0, 0, 0, 0.3)
+        event.target.style.backgroundColor = "rgba(0, 0, 0, 0.3)";
       }
     }
     function allowDrop(event) {
@@ -63,7 +51,9 @@
     }
     function drop(event) {
       event.preventDefault();
-      document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder")
+      document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").value;
+      event.target.style.backgroundColor = "rgba(0, 0, 0, 0)";
+      event.target.style.border = "0.05vw dashed rgba(0, 0, 0, 0.4)";
     }
     </script>
 </body>
