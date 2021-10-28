@@ -57,8 +57,8 @@ import boto3
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
 def upload_file():
-    # s3_resource = boto3.resource('s3')
-    # my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
+    s3_resource = boto3.resource('s3')
+    my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
 
     user_folder = current_user.username+'/'
