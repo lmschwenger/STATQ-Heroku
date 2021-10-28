@@ -9,22 +9,15 @@ import pandas as pd
 
 def parse_data(file_path):
     
+    df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
+        if 'Dato' in list(df.columns):
+            DateName = 'Dato'
+        elif 'Startdato' in list(df.columns):
+            DateName = 'Startdato'            
     try:
-        df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',',
-                         delimiter=";")
-        DateName = 'Dato'
-        try:
-            df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
-        except ValueError:
-            return 'Filen kan ikke læses (Fejlkode 1)'
-    except KeyError:
-        df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',',
-                         delimiter=";")
-        DateName = 'Startdato'
-        try:
-            df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
-        except ValueError:
-            return 'Filen kan ikke læses (Fejlkode 1)'
+        df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
+    except ValueError:
+        return 'Filen kan ikke læses (Fejlkode 1)'
     try:
         df.dropna(subset=['Resultat'], how='all', inplace=True)
         df.dropna(subset=[DateName], how='all', inplace=True)
