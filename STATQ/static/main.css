@@ -12,9 +12,6 @@ div.file-drop-area {
   height: 9.5vh;
   transition: 0.2s;
 }
-div.file-drop-area:hover {
-  background-color:  rgba(0, 0, 0, 0.3);
-}
 
 div.bg-image {
   position: fixed;
