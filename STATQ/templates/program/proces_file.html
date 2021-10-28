@@ -50,10 +50,11 @@
       }
     }
     function drop(event) {
-      event.preventDefault();
-      document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").value;
+      if ( event.target.className == "file-drop-area" ) {
+      document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files;
       event.target.style.backgroundColor = "rgba(0, 0, 0, 0)";
       event.target.style.border = "0.05vw dashed rgba(0, 0, 0, 0.4)";
+      }
     }
     </script>
 </body>
