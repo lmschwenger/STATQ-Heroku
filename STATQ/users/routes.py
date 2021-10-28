@@ -51,10 +51,6 @@ def logout():
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    old_path = current_app.root_path+'/static/files/'+current_user.username+'/'
-    if not os.path.exists(old_path):
-        os.mkdir(old_path)
-    #print(old_path)
     form = UpdateAccountForm()
     if form.validate_on_submit():
         current_user.username = form.username.data
@@ -70,9 +66,7 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    return render_template('account.html', title='Account',
-                           image_file=image_file, form=form)
+    return render_template('account.html', title='Account', form=form)
 
 @users.route("/nulstil_kodeord", methods=['GET', 'POST'])
 def reset_request():

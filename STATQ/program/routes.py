@@ -80,6 +80,7 @@ def upload_file():
 
         random_hex = secrets.token_hex(8)
         _, f_ext = os.path.splitext(file.filename)
+        upload path = os.
         s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
@@ -122,9 +123,9 @@ def proces_file(filename):
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     file = my_bucket.objects.filter(Prefix=str(current_user.username)+"/"+str(filename))
-    if os.path.getsize(file) == 0:
-        flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
-        return redirect(url_for('program.your_files'))
+    # if os.path.getsize(file) == 0:
+    #     flash('Filen ser ud til at være tom (Fejlkode 0)', 'danger')
+    #     return redirect(url_for('program.your_files'))
     df = parse_data(file)
     if isinstance(df, str):
         flash(df, 'danger')
