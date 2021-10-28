@@ -9,15 +9,14 @@
             <div class="file-drop-area" style="">
                 <span class="fake-btn">Vælg fil</span>
                 <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
-                <input class="file-input" type="file" name="myFile">
-                {% if myFile %}
-                    <script>
+                <input id="fil-holder" class="file-input" type="file" name="myFile">
+                <script>
                         var span = document.getElementById("Span-id");
-                        function gfg_Run() {
-                            span.innerText = {{ myFile }};
+                        if(document.getElementById("fil-holder").value != ""){
+                            function gfg_Run() {
+                                span.innerText = {{ myFile }};
                         }         
-                    </script>
-                {% endif %}
+                </script>
             </div>
             <a style="position: relative; top: 0vh; left: 0.5vw; right: 1vw; ">
                 <input type="submit" style="height: 100%; border-radius: 0.5vw" value="Upload" onclick="window.location.href='{{ url_for('program.upload_file', filename=myFile) }}'">
