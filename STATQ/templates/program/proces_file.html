@@ -12,8 +12,8 @@
                 <input id="fil-holder" class="file-input" type="file" name="myFile">
                 <script>
                         var span = document.getElementById("Span-id");
-                        var filnavn = document.getElementById("fil-holder").value
-                        if(filnavn != ""){
+                        var filnavn = document.getElementById("fil-holder")
+                        if(filnavn.value != ""){
                                 span.innerHTML = filnavn;
                         }         
                 </script>
