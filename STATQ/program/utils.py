@@ -6,11 +6,11 @@ import json
 import plotly.express as px
 import plotly.graph_objects as go   
 import pandas as pd
-
+from pandas.errors import EmptyDataError
 def parse_data(file_path):
     try:
         df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
-    except pandas.errors.EmptyDataError:
+    except EmptyDataError:
         return 'Filen kan ikke læses (Fejlkode 0)'
     if 'Dato' in list(df.columns):
         DateName = 'Dato'
