@@ -15,8 +15,6 @@ from STATQ.program.utils import (parse_data,
 program = Blueprint('program', __name__)
 from STATQ import s3
 import boto3
-
-
 # @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 # @login_required
 # def upload_file():
@@ -86,6 +84,7 @@ def upload_file():
         return redirect(url_for('program.your_files'))
 
     return render_template('program/proces_file.html', files=files)
+
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
 def your_files():
@@ -94,15 +93,15 @@ def your_files():
     files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
-@program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
-@login_required
-def your_files():
-    current_user.username+'/'
-    if not os.path.exists(user_path):
-        os.mkdir(user_path)        
-    files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
-    filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
-    return render_template('program/proces_file.html', files=files, filepaths=filepaths)
+# @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
+# @login_required
+# def your_files():
+#     current_user.username+'/'
+#     if not os.path.exists(user_path):
+#         os.mkdir(user_path)        
+#     files = [f for f in listdir(user_path) if isfile(join(user_path, f))]
+#     filepaths = [(user_path+f) for f in listdir(user_path) if isfile(join(user_path+'/', f))]
+#     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
 
 
