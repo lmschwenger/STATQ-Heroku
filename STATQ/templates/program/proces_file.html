@@ -35,11 +35,12 @@
     </div>
 
     <script>
-    $(document).ready(function(){
+    if ( document.getElementById("fil-holder").files[0].name != "" ) {
+         document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name
+    }
         $("#fil-holder").on('change',function(){
             document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;            
         });
-    });
     function drop(event) {
         event.preventDefault();
         document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
