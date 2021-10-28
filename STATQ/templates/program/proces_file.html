@@ -9,7 +9,7 @@
             <div class="file-drop-area" id="file-drop-area-id">
                 <span class="fake-btn">Vælg fil</span>
                 <span id="Span-id" class="file-msg">Eller træk filen ind i feltet</span>
-                <input id="fil-holder" class="file-input" type="file" name="myFile">
+                <input id="fil-holder" class="file-input" type="file" name="myFile" onclick="changename()">
             </div>
             <a style="position: relative; top: 0vh; left: 0.5vw; right: 1vw; ">
                 <input type="submit" style="height: 100%; border-radius: 0.5vw" value="Upload" onclick="window.location.href='{{ url_for('program.upload_file', filename=myFile) }}'">
@@ -35,8 +35,10 @@
     </div>
 
     <script>
-    if ( document.getElementById("fil-holder").files[0].name != "" ) {
-         document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name
+    function changename() {
+        if( document.getElementById("fil-holder").files[0].name != "" ) {
+            document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name
+        }
     }
         $("#fil-holder").on('change',function(){
             document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;            
