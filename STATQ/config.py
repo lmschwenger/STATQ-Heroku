@@ -9,7 +9,7 @@ class Config:
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')
-    ALLOWED_FILE_EXTENSIONS = ["CSV", "TXT"]
+    ALLOWED_FILE_EXTENSIONS = ["CSV"]
     MAIL_SERVER = os.environ.get('MAIL_SERVER')
     MAIL_PORT = 587
     MAIL_USE_TLS = True

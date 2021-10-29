@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block content %}
-        <div class="content-section" style="font-size: 1.35vw">
+        <div class="content-section" style="font-size: 2.7vmin">
             <form method="POST" action="">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group">
-                    <legend class="border-bottom mb-4">Opret bruger</legend>
+                    <h2 style="font-size: 5vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Opret bruger </u></h2>
                     <div class="form-group">
                         {{ form.username.label(class="form-control-label") }}
 
@@ -60,7 +60,7 @@
                     </div>
                 </fieldset>
                 <div class="form-group">
-                    {{ form.submit(class="btn btn-outline-info") }}
+                    {{ form.submit(class="btn btn-info") }}
                 </div>
             </form>
         </div>

@@ -1,11 +1,11 @@
 {% extends "layout.html" %}
 {% block content %}
         <div class="content-section">
-            <h1>Opdatér email</h1>
+            <h1 style="font-size: 5vmin">Opdatér email</h1>
             <form method="POST" action="" enctype="multipart/form-data">
                 {{ form.hidden_tag() }}
                 <fieldset class="form-group" >
-                    <div class="form-group" style="font-size: 1.5vw">
+                    <div class="form-group" style="font-size: 3vmin">
                         {{ form.email.label(class="form-control-label") }}
                         {% if form.email.errors %}
                             {{ form.email(class="form-control form-control-lg is-invalid") }}

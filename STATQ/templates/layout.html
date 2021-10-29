@@ -18,7 +18,7 @@
 
 <body class="bg-image">
     <div class="sidebar">
-      <li class="nav nav-pills" style="gap: 5vw; margin-top: 2vh; margin-left: 22vw">
+      <li class="nav nav-pills" style="gap: 5vw; margin-top: 2vh; margin-left: 25vw">
         <div class="sidebar-header">
           <a class="sideheader" href="{{ url_for('main.home') }}">
             STATQ
@@ -48,11 +48,11 @@
         <a class="login-trigger" href="{{ url_for('users.account') }}">Bruger</a>
       {% else %}
         <a class="login-trigger" href="{{ url_for('users.register') }}" style="float: right">Opret</a>
-        <a class="login-trigger" href="{{ url_for('users.login') }}" style="float: right">Login</a>
+        <a class="login-trigger" href="{{ url_for('users.login') }}" style="float: right">Log ind</a>
 
       {% endif %}
     </div>
-      <div class="container">
+      <div class="container" style="top: .5vh">
           {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
               {% for category, message in messages %}

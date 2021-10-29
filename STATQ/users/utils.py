@@ -7,7 +7,7 @@ from STATQ import mail
 
 def send_reset_email(user):
     token = user.get_reset_token()
-    msg = Message('Password Reset Request', 
+    msg = Message('Nulstilling af kodeord', 
                     sender='SR Batymetri', 
                     recipients=[user.email])
     msg.body = f'''Følg nedenstående link for at nulstille kodeord:

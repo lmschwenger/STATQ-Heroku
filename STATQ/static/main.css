@@ -18,7 +18,7 @@ div.file-drop-area:hover {
 
 div.bg-image {
   position: fixed;
-  background-image: url(/static/background_1.jpg);
+  background-image: url(/static/background_3.jpg);
   background-position:  center center;
   background-repeat: no-repeat;
   background-attachment:  fixed;
@@ -45,7 +45,7 @@ span.fake-btn {
   border-radius: 3px;
   padding: .4vh .75vw;
   margin-right: 0.5vw;
-  font-size: 1vw;
+  font-size: 2vmin;
   margin-left: 0.5vw;
   text-transform: uppercase;
 }
@@ -55,7 +55,7 @@ span.file-msg {
   font-size: small;
   font-weight: 300;
   line-height: 1.4;
-  font-size: 1vw;
+  font-size: 2vmin;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -69,19 +69,22 @@ input.file-input {
   width: 100%;
   cursor: pointer;
   opacity: 0;
-  &:focus {
-    outline: none;
-  }
 }
 
-
-#rawplot {
-  width: 57.8vw;
+#Front {
+  object-fit: fill;  
   height: 70vh;
+  width: 60vw;
+}
+#rawplot {
+  object-fit: fill;  
+  height: 70vh;
+  width: 60vw;
 }
 #seasonplot {
-  width: 57.8vw;
+  object-fit: fill;  
   height: 70vh;
+  width: 60vw;
 }
 
 #left {
@@ -193,7 +196,7 @@ span.front:nth-child(7) {
   overflow: auto;
   color: black;
   font-family: Helvetica;
-  font-size: 1.5vw;
+  font-size: 3vmin;
   top: 0vh;
   left: 19.5vw;
 }
@@ -210,7 +213,7 @@ span.front:nth-child(7) {
   color: black;
   top: .5vh;
   font-family: Helvetica;
-  font-size: 2.5vw;
+  font-size: 5vmin;
 
 }
 a.sideheader {
@@ -239,7 +242,7 @@ div.sidebar-header {
   position: fixed;
   font-family: Lato;
   color: white;
-  font-size: 2.5vw;
+  font-size: 5vmin;
   top: -.0vh;
   left: 0vw;
   background: rgb(176,171,255);
@@ -259,7 +262,7 @@ div.sidebar-header:hover {
 div.sidebar-content {
   top: .25vh;
   left: 12vw;
-  font-size: 1.5vw;
+  font-size: 3vmin;
   color: white;
   font-family: Lato;
   margin-left: 3vw;
@@ -269,7 +272,7 @@ div.sidebar-content {
 .login-trigger {
   position: absolute;
 
-  font-size: 1vw;
+  font-size: 2vmin;
   color: white;
   background-image: transparent;
   border-radius: 0.0vw;
@@ -303,8 +306,8 @@ div.sidebar-content {
 .logout-trigger {
   position: fixed;
   font-weight: bold;
-  font-size: 1vw;
-  color: #001B8A;
+  font-size: 2vmin;
+  color: white;
 
   padding: 0.75vh 1.5vw;
   border-radius: 0.5vw;
@@ -329,7 +332,7 @@ div.sidebar-content {
 }
 
 .file-boxes {
-  font-size: 1vw;
+  font-size: 2vmin;
   background-color: lightgrey;
   height: 6vh;
   edge-color:  black;
@@ -352,7 +355,7 @@ div.sidebar-content {
   width: 80%;
   max-width: 7.5vw;
   top: 30vh;
-  font-size: 0.6vw;
+  font-size: 1.2vmin;
   font-family: Helvetica;
   background: #fff; /* fallback color for old browsers */background: rgba(255, 255, 255, 1);
   border-radius: 0.4vw;
@@ -372,7 +375,7 @@ div.sidebar-content {
 }
 
 p {
-  font-size: 1vw;
+  font-size: 2vmin;
 }
 
 

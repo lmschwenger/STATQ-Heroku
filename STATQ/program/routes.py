@@ -100,7 +100,6 @@ def proces_file(filename):
 
 
 @program.route('/StatQ/kom-godt-i-gang')
-@login_required
 def kom_godt_i_gang():
     return render_template('program/kom-godt-i-gang.html')
 
