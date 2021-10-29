@@ -1,4 +1,3 @@
-
 import os
 import secrets
 from flask import url_for, current_app
@@ -7,6 +6,7 @@ from STATQ import mail
 
 def send_reset_email(user):
     token = user.get_reset_token()
+
     msg = Message('Nulstilling af kodeord', 
                     sender='SR Batymetri', 
                     recipients=[user.email])

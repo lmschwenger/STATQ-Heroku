@@ -1,5 +1,5 @@
-   
-from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
+from datetime import timedelta  
+from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app, session
 from flask_login import login_user, current_user, logout_user, login_required
 from STATQ import db, bcrypt
 from STATQ.models import User

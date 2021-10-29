@@ -72,8 +72,8 @@ input.file-input {
 }
 
 #Front {
+  overflow: scroll;
   object-fit: fill;  
-  height: 70vh;
   width: 60vw;
 }
 #rawplot {
@@ -129,7 +129,7 @@ h1, h2, h3, h4, h5, h6 {
 
 span.front {
   position: absolute;
-  left: 18vw;
+  text-align: center;
 	color: transparent;
   outline-color: black;
 	animation: forwards blur 1s steps(200, end) ;
@@ -209,9 +209,9 @@ span.front:nth-child(7) {
   border-radius: .25vw;
   margin-bottom: 1vh;
   bottom: 2.5vh;
-  overflow: auto;
+
   color: black;
-  top: .5vh;
+  top: .0vh;
   font-family: Helvetica;
   font-size: 5vmin;
 
@@ -270,7 +270,7 @@ div.sidebar-content {
 }
  /*Trigger Button*/
 .login-trigger {
-  position: absolute;
+  position: fixed;
 
   font-size: 2vmin;
   color: white;

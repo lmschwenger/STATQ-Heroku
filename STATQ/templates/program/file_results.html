@@ -1,12 +1,12 @@
 {% extends "layout.html" %}
 {% block content %}   
-    <ul class="nav nav-pills nav-justified" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw; width: 60vw; text-align: center">
+    <ul class="nav nav-pills nav-justified" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw; width: 60vw;">
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Front" style="color: white; font-size: 2.5vmin">Fil info</a></li>
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasondata" style="color: white; font-size: 2.5vmin">Sæson-værdier</a></li>
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rawdata" style="color: white; font-size: 2.5vmin">Målinger</a></li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content" style="">
       <div id="Front" class="tab-pane fade" style="background-color: rgba(255,255,255, .95); padding: .5vh 1vw; border: 1px solid #dddddd; border-radius: .25vw;">
           {% for heading,value in infolist %}
             

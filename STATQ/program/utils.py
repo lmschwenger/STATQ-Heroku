@@ -11,7 +11,7 @@ def parse_data(file_path):
     try:
         df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
     except EmptyDataError:
-        return 'Filen kan ikke læses (Fejlkode 0)'
+        return 'Fejlkode 0: Filen ser ud til at være tom'
     if 'Dato' in list(df.columns):
         DateName = 'Dato'
     elif 'Startdato' in list(df.columns):
@@ -19,18 +19,18 @@ def parse_data(file_path):
     try:
         df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
     except ValueError:
-        return 'Filen kan ikke læses (Fejlkode 1)'
+        return 'Fejlkode 1: Forkert dato-format (se FAQ)'
     try:
         df.dropna(subset=['Resultat'], how='all', inplace=True)
         df.dropna(subset=[DateName], how='all', inplace=True)
         df['Parameter'].to_string()    
         df['Resultat'] = pd.to_numeric(df['Resultat'])
     except KeyError:
-        return 'Filen kan ikke læses (Fejlkode 2)'
+        return 'Fejlkode 2: Filen kan ikke læses (se FAQ)'
     except ValueError:
-        return 'Filen kan ikke læses (Fejlkode 1)'
+        return 'Fejlkode 1: Forkert dato-format (se FAQ)'
     if df.empty:
-        return 'Filen kan ikke læses (Fejlkode 0)'
+        return 'Fejlkode 0: Filen ser ud til at være tom'
     df.set_index(DateName, inplace=True)
     df.sort_index(inplace=True)
     return df
