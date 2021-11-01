@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+{% block content %} 
+  <div class="content-section">  
+    <h2 style="font-size: 5vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Hjælp </u></h2>
+    <p style="color: black; font-size: 2vmin;">Her finder du svar på problemer, som kan opstå under brug af STATQ. 
+      <p style="font-weight: bold; font-size: 2vmin">STATQ kan ikke læse min fil, hvad gør jeg?</p>
+        <p style="margin-left: .5vw; margin-top: 0.01vh; font-size: 1.7vmin">STATQ udnytter, at alle data fra OdaForAlle har den overordnede samme struktur. Derfor er det vigtigt, at filer som skal bearbejdes af STATQ ikke er blevet ændret efter du har hentet dem fra OdaForAlle.au.dk. STATQ registrerer tre typer fejl:</p>
+        <div style="text-indent: .5vw; margin-bottom: 0.5vh">
+          <li style="font-size: 1.7vmin"> <b>Fejlkode 0:</b> Filen er tom. Tjek at filen indeholder data  </li>
+          <li style="font-size: 1.7vmin"> <b>Fejlkode 1:</b> Filens dato-format er blevet ændret. Skal angives YYYYMMDD (f.eks. 1. december 2020 --> 20201201) </li>
+          <li style="font-size: 1.7vmin"> <b> Fejlkode 2:</b> Filens kolonne-navne er blevet ændret. Filen kan kun læses, hvis originale kolonnenavne bevares.</li>
+        </div>
+<p style="margin-left: .5vw; margin-top: 0.01vh; font-size: 1.7vmin"> Opstår en anden fejl, som ikke umiddelbart kan løses, modtages henvendelser gerne på LMS@srbat.dk.</p>
+      <p style="font-weight: bold; font-size: 2vmin">
+        Kan jeg uploade filer fra andre databaser (f.eks. Vandportalen eller Danmarks Miljøportal) til STATQ?
+      </p>
+      <p style="margin-left: .5vw;font-size: 1.7vmin"> STATQ understøtter i øjeblikket kun direkte import af filer fra OdaForAlle. Ønskes data af andet ophav at anvendes, kan en fil manuelt opstilles, således fil-strukturen opfyldes. </p> 
+    </ol>
+  </div>
+{% endblock content %}
+
+

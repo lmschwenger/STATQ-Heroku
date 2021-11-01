@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    {% if title %}
+        <title>STATQ - {{ title }}</title>
+    {% else %}
+        <title>STATQ</title>
+    {% endif %}
+    
+</head>
+
+<body class="bg-image">
+    <div class="sidebar">
+      <li class="nav nav-pills" style="gap: 5vw; margin-top: 2vh; margin-left: 25vw">
+        <div class="sidebar-header">
+          <a class="sideheader" href="{{ url_for('main.home') }}">
+            STATQ
+          </a>
+        </div><br>
+        <div class="sidebar-content">
+          <a class="side" href="{{ url_for('program.kom_godt_i_gang') }}">
+            Kom godt i gang
+          </a>
+        </div>
+        <div class="sidebar-content">
+          <a class="side" href="{{ url_for('program.your_files') }}">
+              Filer
+          </a>
+        </div>
+        <div class="sidebar-content">
+          <a class="side" href="{{ url_for('program.help') }}">
+              FAQ
+          </a>
+        </div>
+
+      </li>
+    </div>
+    <div class="login-trigger-row">
+      {% if current_user.is_authenticated %}
+        <a class="logout-trigger" href="{{ url_for('users.logout') }}" >Log ud</a>
+        <a class="login-trigger" href="{{ url_for('users.account') }}">Bruger</a>
+      {% else %}
+        <a class="login-trigger" href="{{ url_for('users.register') }}" style="float: right">Opret</a>
+        <a class="login-trigger" href="{{ url_for('users.login') }}" style="float: right">Log ind</a>
+
+      {% endif %}
+    </div>
+      <div class="container" style="top: .5vh">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                  {{ message }}
+                </div>
+              {% endfor %}
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+      </div>
+
+    <div class="bg-image"></div>
+    <div class="blur"></div>
+
+      <!-- Optional JavaScript -->
+      <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+      <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</body>
+</html>
