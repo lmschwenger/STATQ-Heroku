@@ -145,9 +145,8 @@ h1, h2, h3, h4, h5, h6 {
   animation-name: blur;
   animation-direction: forwards;
   animation-timing-function: ease-in-out;
-  animation-duration: 1s; 
-  animation-iteration-count: steps(800);
-
+  animation-iteration-count: steps(50);
+  animation-duration: 1s;
 
 }
 
@@ -186,7 +185,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 @-webkit-keyframes blur {
-  from {top: 51vh;}
+  from {top: 52vh; opacity: 0}
   to { opacity: 1; top: 50vh;}
 }
 
@@ -245,7 +244,7 @@ div.sidebar {
   position: fixed;
   background-color: rgba(1,1,1, 0.25);
   width: 100vw;
-  height: 7.8vh;
+  height: 7.8vmin;
   top: 0vh;
   color: white;
   position: fixed;
@@ -263,8 +262,8 @@ div.sidebar-header {
   top: -.0vh;
   left: 0vw;
   background: rgb(176,171,255);
-  background: linear-gradient(60deg, rgba(0,0,0,.0) 00%, rgba(0,0,0,0) 74.5%, rgba(255,255,255,1) 75%, rgba(192,255,252,0) 75.5%);
-
+  background: linear-gradient(60deg, rgba(0,0,0,.0) 00%, rgba(0,0,0,0) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%);
+  background: linear-gradient(60deg, rgba(0,133,255,1) 00%, rgba(0,133,255,1) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%); 
   padding-left: 5vw;
   padding-right: 10vw;
   border-radius: 0vw;
@@ -275,29 +274,55 @@ div.sidebar-header:before{
   color: black;
   transition-delay: 1s; /* delays for 1 second */
   -webkit-transition-delay: 1s; /* for Safari & Chrome */ 
-  background: linear-gradient(60deg, rgba(0,133,255,1) 00%, rgba(0,133,255,1) 74.5%, rgba(255,255,255,1) 75%, rgba(192,255,252,0) 75.5%);
-  transition: .4s linear;  
+  background: linear-gradient(60deg, rgba(0,133,255,0) 00%, rgba(0,133,255,0) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%); 
   position:absolute;
-  width:0%;
+  width:100%;
   top:0;
   left:0;
   height:100%;
-  transition: 0.3s linear;
-  text-decoration: none;
+  transition: 0.3s;
+  transition-timing-function: ease-out;
+
   z-index:-1;
 }
 div.sidebar-header:hover:before {
-  width: 100%;
-  text-decoration: none;
+  width: 0%;
 }
 div.sidebar-content {
+  text-align: center;
   top: .25vh;
-  left: 12vw;
-  font-size: 3vmin;
   color: white;
   font-family: Lato;
-  margin-left: 3vw;
+}
+div.sidebar-content:nth-child(1) {
+  position: absolute;
+  font-size: 3vmin;
+  width: 30vmin;
+  left: 10%;
 
+
+  left: 25%;
+}
+
+
+div.sidebar-content:nth-child(2) {
+  width: 30vmin;
+  position: absolute;
+  font-size: 3vmin;
+  gap: 2vmin;
+  left: 43.5%;
+}
+div.sidebar-content:nth-child(3) {
+  position: absolute;
+  font-size: 3vmin;
+  width: 30vmin;
+  gap: 2vmin;
+  left: 57.5%;
+}
+#VideoFrame {
+  position: relative;
+  width: 25%;
+  height: 100%;
 }
  /*Trigger Button*/
 .login-trigger {
@@ -311,9 +336,9 @@ div.sidebar-content {
   line-height: 1em;
   padding: 0.75vh 1vw;
   text-align: center;
-  top: 2vh;
-  left: 92vw;
-  width: 7vw;
+  top: 2vmin;
+  left: 90vw;
+  width: 10vw;
   z-index: 1000;
 }
 
@@ -327,10 +352,10 @@ div.sidebar-content {
   top: 2vh;  
 }
 .login-trigger-row a:nth-child(1) {
-  left: 92vw;
+  left: 89vw;
 }
 .login-trigger-row a:nth-child(2) {
-  left: 84vw;
+  left: 78vw;
 }
 
 .logout-trigger {
@@ -371,8 +396,8 @@ div.sidebar-content {
 }
 
 .nav a {
-  padding: .25em .8em;
-  color: rgba(255,255,255,1);
+  padding: .45em .8em;
+  color: rgba(255,255,255,.7);
   position: relative;
   text-decoration: none;
   font-size: 2.5vmin;
