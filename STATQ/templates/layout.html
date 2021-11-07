@@ -18,12 +18,12 @@
 
 <body class="bg-image">
     <div class="sidebar">
-      <li class="nav nav-pills" style="gap: 5vw; margin-top: 2vh; margin-left: 25vw">
-        <div class="sidebar-header">
-          <a class="sideheader" href="{{ url_for('main.home') }}">
-            STATQ
-          </a>
-        </div><br>
+      <div class="sidebar-header" style="text-decoration: none;">
+        <a class="sideheader" style="text-decoration: none;" href="{{ url_for('main.home') }}">
+          STATQ
+        </a>
+      </div>
+      <li class="nav" style="gap: 5vw; margin-left: 25vw">
         <div class="sidebar-content">
           <a class="side" href="{{ url_for('program.kom_godt_i_gang') }}">
             Kom godt i gang
