@@ -35,7 +35,7 @@ div.blur {
   width: 100vw;
   height: 100vh;
   background-color: black;
-  opacity: .5;
+  opacity: .45;
   z-index: -1;
 }
 span.fake-btn {
@@ -74,17 +74,17 @@ input.file-input {
 #Front {
   overflow: scroll;
   object-fit: fill;  
-  width: 60vw;
+  width: 62.4vw;
 }
 #rawplot {
   object-fit: fill;  
   height: 70vh;
-  width: 60vw;
+  width: 62.4vw;
 }
 #seasonplot {
   object-fit: fill;  
   height: 70vh;
-  width: 60vw;
+  width: 62.4vw;
 }
 
 #left {
@@ -321,7 +321,7 @@ div.sidebar-content {
 .menu-appear {
   position: absolute;
   overflow-y: auto;
-  left: 19.5vw;
+  left: 15.5vw;
   width: 63.2vw;
   top: 0vh;
   bottom: 1vh;
@@ -331,6 +331,21 @@ div.sidebar-content {
   -webkit-animation: forwards fadeIn .3s steps(10, end);  
 }
 
+.container {
+  display: block;
+
+  left: 18vw;
+  margin-top: 8vh;
+  width: 64vw;
+  max-width: 100vw;
+}
+.tab-content {
+  width: 62.4vw;
+}
+
+.nav .nav-pills .nav-justified {
+  left: 10.5vw;
+}
 .file-boxes {
   font-size: 2vmin;
   background-color: lightgrey;
@@ -342,11 +357,21 @@ div.sidebar-content {
   padding-right: 1vw;
 }
 
+ul.topnav {
+  list-style-type: none;
+  display: block;
+
+
+  background: black;
+
+}
+
+
 
 .content-container {
   position: fixed;
-  left: 15vw;
-  width: 70vw;
+  left: 10vw;
+  width: 80vw;
 }
 .semi-transparent-tab{
   display: block;

@@ -1,35 +1,81 @@
 {% extends "layout.html" %}
 {% block content %}
-        <div class="content-section">
-            <div>
-                <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Før du begynder </u></h2>
+    <ul class="nav nav-pills nav-fill" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw; ">
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#FDB" style="color: white; font-size: 2.5vmin">Før du begynder</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#OmData" style="color: white; font-size: 2.5vmin">Sådan får du data</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#OmResultater" style="color: white; font-size: 2.5vmin">Analysér data med STATQ</a></li>
+    </ul>
+
+    <div class="tab-content" style="">
+        <div id="FDB" class="tab-pane fade">
+            <div class="content-section">
                 <p style="color: black; font-size: 2vmin;">STATQ er et redskab til nemt og hurtigt at få overblik over kemiske og hydrologiske vandløbsdata. STATQ er redskabet og du leverer dataene. I øjeblikket fungerer STATQ udelukkende med data fra OdaForAlle, eller .csv / .txt-filer med samme struktur (kolonne-navne og dato-format).</p>
                     <p><b>Den overordnede procedure for brug af STATQ er følgende:</b></p>
                     <ol style="color: black; font-size: 2vmin; margin-left: 2vw">
                         <li>Hent data fra online-databasen OdaForAlle (link <a href="https://odaforalle.au.dk/main.aspx" target="_blank">her</a>) </li>
                         <li>Hent de ønskede data som CSV-fil</li>
-                        <li>Upload fil til STATQ under <a href="{{ url_for('program.your_files') }}" >Filer</a>
+                        <li>Upload fil til STATQ under <a href="{{ url_for('program.your_files') }}" >Filer</a></li>
                         <br>
                         <li>Under filer kan du se resultater ved tryk på <button style="margin-left: 1vw; width:  4vw; height: 4vh; font-size:  1vmin;" class = "btn btn-primary" >
                                 <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
                                   <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
-                                </svg>
+                                </svg></li>
                             </button>
                     </ol>
                 </p>
-                <p><b>Sådan henter du data fra OdaForAlle</b></p>
-                <ol style="color: black; font-size: 2vmin; margin-left: 2vw">
-                    <li>Gå ind på <a href="https://odaforalle.au.dk/main.aspx" taget="_blank"> OdaForAlle</a></li>
-                    <li> Log ind med email på startsiden </li>
-                    <li> Vælg vandløb under fanen "Hent data" øverst til venstre.</li>
-                    <li> Under 'Emne' vælg enten Vandkemi --> Næringsstoffer mm. eller vælg Hydrometri --> Vandstand (eller vandføring). </li>
-                    <li> Find ønsket vandløb under Lokalitet og vælg derefter sted under observationsstednr. Eksempel: Gudenå, ved Ulstrup. </li>
-                    <li> Angiv ønsket årrække, som skal udtrækkes. </li>
-                    <br>
-                    <li> Tryk CSV for at hente CSV-filen. Den er nu klar til at uploade til STATQ </li>
-
-                </ol>
             </div>
         </div>
+      <div id="OmData" class="tab-pane fade"> 
+        <div class="content-section">
+            <p><b>Sådan henter du data fra OdaForAlle</b></p>
+            <ol style="color: black; font-size: 2vmin; margin-left: 2vw">
+                <li>Gå ind på <a href="https://odaforalle.au.dk/main.aspx" taget="_blank"> OdaForAlle</a></li>
+                <li> Log ind med email på startsiden </li>
+                <li> Vælg vandløb under fanen "Hent data" øverst til venstre.</li>
+                <li> Under 'Emne' vælg enten Vandkemi --> Næringsstoffer mm. eller vælg Hydrometri --> Vandstand (eller vandføring). </li>
+                <li> Find ønsket vandløb under Lokalitet og vælg derefter sted under observationsstednr. Eksempel: Gudenå, ved Ulstrup. </li>
+                <li> Angiv ønsket årrække, som skal udtrækkes. </li>
+                <br>
+                <li> Tryk CSV for at hente CSV-filen. Den er nu klar til at uploade til STATQ </li>
+                <br>
+                <p> For yderligere information, se videoen herunder: </p>
+                <br>
+                <div>
+                    <iframe width="560" height="315" src="https://youtu.be/5uPvar9wZl0" frameborder="0" allowfullscreen></iframe>
+            </ol>
+        </div>
+      </div>
+      <div id="OmResultater" class="tab-pane fade"> 
+        <div class="content-section">
+            <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Før du begynder </u></h2>
+            <p style="color: black; font-size: 2vmin;">STATQ er et redskab til nemt og hurtigt at få overblik over kemiske og hydrologiske vandløbsdata. STATQ er redskabet og du leverer dataene. I øjeblikket fungerer STATQ udelukkende med data fra OdaForAlle, eller .csv / .txt-filer med samme struktur (kolonne-navne og dato-format).</p>
+                <p><b>Den overordnede procedure for brug af STATQ er følgende:</b></p>
+                <ol style="color: black; font-size: 2vmin; margin-left: 2vw">
+                    <li>Hent data fra online-databasen OdaForAlle (link <a href="https://odaforalle.au.dk/main.aspx" target="_blank">her</a>) </li>
+                    <li>Hent de ønskede data som CSV-fil</li>
+                    <li>Upload fil til STATQ under <a href="{{ url_for('program.your_files') }}" >Filer</a>
+                    <br>
+                    <li>Under filer kan du se resultater ved tryk på <button style="margin-left: 1vw; width:  4vw; height: 4vh; font-size:  1vmin;" class = "btn btn-primary" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                              <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                            </svg>
+                        </button>
+                </ol>
+            </p>
+            <p><b>Sådan henter du data fra OdaForAlle</b></p>
+            <ol style="color: black; font-size: 2vmin; margin-left: 2vw">
+                <li>Gå ind på <a href="https://odaforalle.au.dk/main.aspx" taget="_blank"> OdaForAlle</a></li>
+                <li> Log ind med email på startsiden </li>
+                <li> Vælg vandløb under fanen "Hent data" øverst til venstre.</li>
+                <li> Under 'Emne' vælg enten Vandkemi --> Næringsstoffer mm. eller vælg Hydrometri --> Vandstand (eller vandføring). </li>
+                <li> Find ønsket vandløb under Lokalitet og vælg derefter sted under observationsstednr. Eksempel: Gudenå, ved Ulstrup. </li>
+                <li> Angiv ønsket årrække, som skal udtrækkes. </li>
+                <br>
+                <li> Tryk CSV for at hente CSV-filen. Den er nu klar til at uploade til STATQ </li>
+
+            </ol>
+        </div>
+      </div>
+    </div>
 {% endblock content %}
 

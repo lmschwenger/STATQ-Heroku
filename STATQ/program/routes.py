@@ -84,7 +84,7 @@ def proces_file(filename):
     #sub_df['Parameter'] = parameters
     headings = list(sub_df.columns)
     information = list(sub_df.iloc[0])
-
+    
     infolist = zip(headings, information)
     string_test = str(df['Parameter'].iloc[0])
     cond1 = 'Vandføring'

@@ -36,7 +36,6 @@ def parse_data(file_path):
     return df
 
 def plotly_hydro(df):
-
     Enhed = str(df['Parameter'].iloc[0]) + ', ' + str(df['Enhed'].iloc[0])
     if str(df['Parameter'].iloc[0]) == 'Vandstand':
         symbol = 'Kotesystem'
@@ -44,7 +43,7 @@ def plotly_hydro(df):
         symbol = 'Enhed'
 
     fig = go.Figure()
-    fig.add_trace(go.Scatter(x=df.index, y=df['Resultat'], name=df['Parameter'][0], connectgaps=False,
+    fig.add_trace(go.Scatter(x=df.index, y=df['Resultat'], name=df['Parameter'][0] + ' [' + df['Enhed'][0]+']', connectgaps=False,
         mode = 'lines'))
 
     # fig = px.line(df, y='Resultat', color='Parameter',
@@ -56,96 +55,105 @@ def plotly_hydro(df):
         mode='lines+markers',
         marker=dict( color='black', size=8, line= dict( color='black', width=2 ))))
     fig.update_xaxes(title_text="")
-    fig.update_layout(autosize=True, title=df['ObservationsStedNavn'].iloc[0])
+    if 'ObservationsStedNavn' in list(df.columns):
+        if len(set(df['ObservationsStedNavn'])) > 1 and 'Lokalitetsnavn' in list(df.columns):
+            fig.update_layout(autosize=True, title=df['Lokalitetsnavn'].iloc[0])  
+    else:
+        fig.update_layout(autosize=True, title='Målestation(er): '+ str(set(df['ObservationsStedNr'])).strip("'{}'"))
     fig.data = (fig.data[1],fig.data[0])
-    # fig.update_traces(marker=dict(size=10, opacity=0.75,
-    #                               line=dict(width=1.5, color='black')))
+    if str(df['Parameter'].iloc[0]) == 'Vandstand':
+        fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graphJSON
 
 def plotly_kemi(df):
     df['Parameter'] = df['Parameter'] + ' [' + df['Enhed'] + ']'
-    fig = px.scatter(df, y='Resultat', color='Parameter', 
-        title=df['ObservationsStedNavn'].iloc[0],
-        labels={'Parameter'+'Enhed'}
-        )
-    fig.update_layout(autosize=True, title=df['ObservationsStedNavn'].iloc[0])
+    if 'ObservationsStedNavn' in list(df.columns):
+        fig = px.scatter(df, y='Resultat', color='Parameter', symbol='ObservationsStedNavn',
+            labels={'Parameter'+'Enhed'}
+            )
+        fig.update_layout(autosize=True, title=str(set(df['ObservationsStedNavn'])).strip("'{}'"))
+    else:
+        fig = px.scatter(df, y='Resultat', color='Parameter', symbol='ObservationsStedNr',
+            labels={'Parameter'+'Enhed' + ' (st. ' + 'ObservationsStedNr' + ')'}
+            )
+        fig.update_layout(autosize=True, title='Målestation(er): ' + str(set(df['ObservationsStedNr'])).strip("'{}'"))
     fig.update_xaxes(title_text="")
     fig.update_yaxes(title_text="Værdi")
     #fig.update_layout(barmode='group')
-    fig.update_traces(marker=dict(size=8, opacity=0.85,
+    fig.update_traces(marker=dict(size=10, opacity=0.85,
                                   line=dict(width=0.4, color='black')))
-    #fig.data[0].update(mode='markers+lines')
+    fig.update_layout(legend_title="", legend=dict(
+        orientation="h",
+        font = dict(size=14)
+
+    ))
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
+
+# def plotly_kemi(df):
+#     df['Parameter'] = df['Parameter'] + ' [' + df['Enhed'] + ']'
+#     if 'ObservationsStedNavn' in list(df.columns):
+#         places = list(set(df['ObservationsStedNavn']))
+#         place = str('ObservationsStedNavn')
+#     elif 'ObservationsStedNr' in list(df.columns):
+#         places = list(set(df['ObservationsStedNr']))
+#         place = str('ObservationsStedNr')
+#     parameters= list(set(df['Parameter']))
+#     fig = go.Figure()
+#     for i in range(0,len(places)):
+#         df_place = df.loc[df[place] == str(places[i])]
+#         for j in range(0,len(parameters)):
+#             sub_df = df_place.loc[df_place['Parameter'] == str(parameters[j])]
+#             x = sub_df.index
+#             y = sub_df['Resultat']
+#             if j == 0:
+#                 fig.add_trace(go.Scatter(x = x, y=y, name=str(parameters[j]),
+#                     legendgroup="group"+str(i),
+#                     legendgrouptitle_text=str(places[i]),
+#                     mode="lines+markers"))
+#             else:
+#                 fig.add_trace(go.Scatter(x = x, y=y, name=str(parameters[j]),
+#                     legendgroup="group"+str(i),
+#                     mode="lines+markers"))
+
+#     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+#     return graphJSON
+
+
+
+
 def plotly_season(df):
-
-    yearly_mean = df['Resultat'].resample('Y').mean()
-    monthly = df['Resultat'].resample('M').mean()
-
     sommer = (df.index.month > 4) & (df.index.month < 10)
     vinter = (df.index.month < 4) + (df.index.month > 10)
-
     seasonal_s = df.loc[sommer, 'Resultat'].resample('Y').mean()
     seasonal_w = df.loc[vinter, 'Resultat'].resample('Y').mean()
     x_s = np.arange(0,len(seasonal_s),1)
     x_w = np.arange(0,len(seasonal_w),1)
-    y_reg1 =[]
-    y_reg2 = []
-    if len(seasonal_s) > 1:
-        mk1 = mk_test(seasonal_s)
-        p1 = normdist_p(mk1, 2)
-        if p1 < 0.05:
-            trend1 = 'Signifikant'
-        elif p1 > 0.05:
-            trend1 = 'Ikke signifikant'
-        a1,b1 = np.polyfit(np.arange(0,len(seasonal_s),1), seasonal_s, 1)
-        y_reg1 = np.linspace(b1, (b1+a1*x_s[-1]), len(x_s))
-    if len(seasonal_w) > 1:
-        mk2 = mk_test(seasonal_w)
-        p2 = normdist_p(mk2, 2)
-        if p2 < 0.05:
-            trend2 = 'Signifikant'
-        elif p2 > 0.05:
-            trend2 = 'Ikke signfikant'
-        a2,b2 = np.polyfit(x_w, seasonal_w, 1)
-        y_reg2 = np.linspace(b2, (b2+a2*x_w[-1]), len(x_w))
-
-
-    monthly = df['Resultat'].resample('M').mean()
 
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=seasonal_s.index, y=seasonal_s, name='Sommer', 
+    fig.add_trace(go.Scatter(x=seasonal_s.index, y=seasonal_s, name=df['Parameter'][0] + ' (Sommer)', 
         mode='lines+markers',
         marker=dict( color='red', size=8, line= dict( color='black', width=2 ) ),
         line=dict( color='black' )
             )
         )
-    if y_reg1 != []:
-        fig.add_trace(go.Scatter(x=seasonal_s.index, y=y_reg1, 
-            name = 'Trend',
-            mode='lines',
-            line = dict(dash='dash', color='red', width=1)
-                )
-            )
-    fig.add_trace(go.Scatter(x=seasonal_w.index, y=seasonal_w, name='Vinter', 
+    fig.add_trace(go.Scatter(x=seasonal_w.index, y=seasonal_w, name=df['Parameter'][0] + ' (Vinter)', 
         mode='lines+markers',
         marker_symbol = 'diamond',
         marker=dict( color='blue', size=7, line= dict( color='black', width=2 ) ),
         line=dict( color='black' )
             )
         )
-    if y_reg2 != []:
-        fig.add_trace(go.Scatter(x=seasonal_w.index, y=y_reg2, 
-            name = 'Trend',
-            mode='lines',
-            line = dict(dash='dash', color='blue', width=1)
-                )
-            )
-    fig.update_xaxes(title_text="")
-    fig.update_layout(autosize=True, title=df['ObservationsStedNavn'].iloc[0])
+    if 'ObservationsStedNavn' in list(df.columns):
+        fig.update_layout(autosize=True, title=str(set(df['ObservationsStedNavn'])).strip("'{}'"))
+    else:
+        fig.update_layout(autosize=True, title='Målestationer(er): ' + str(set(df['ObservationsStedNr'])).strip("'{}'"))
+    
+    if str(df['Parameter'].iloc[0]) == 'Vandstand':
+        fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
