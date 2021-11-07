@@ -366,9 +366,9 @@ div.sidebar-content:nth-child(3) {
 
   padding: 0.75vh 1.5vw;
   border-radius: 0.5vw;
-  top: 2vh;
+  top: 2vmin;
   left: 92vw;
-  width: 7vw;
+  width: 10vw;
   z-index: 1000;
 }
 
