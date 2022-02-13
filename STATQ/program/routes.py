@@ -11,7 +11,7 @@ import plotly.express as px
 from werkzeug.utils import secure_filename
 from STATQ.program.forms import UploadFileForm, ProcesFileForm
 from STATQ.program.utils import (parse_data, 
-                                        plotly_hydro, plotly_kemi, plotly_season)
+                                        plotly_hydro, plotly_kemi, plotly_season, plotly_bar, plotly_stoftransport)
 from STATQ import s3
 import io
 import boto3
@@ -78,25 +78,45 @@ def proces_file(filename):
     if isinstance(df, str):
         flash(df, 'danger')
         return redirect(url_for('program.your_files'))
-    sub_df = df.head(1)
-    sub_df.pop("Resultat")
-    #parameters = str(set(df['Parameter']))
-    #sub_df['Parameter'] = parameters
-    headings = list(sub_df.columns)
-    information = list(sub_df.iloc[0])
-    
-    infolist = zip(headings, information)
-    string_test = str(df['Parameter'].iloc[0])
-    cond1 = 'Vandføring'
-    cond2 = 'Vandstand'
-    if string_test == cond1 or string_test == cond2:
-        graphJSONseason = plotly_season(df)
-        graphJSONraw = plotly_hydro(df)
-    elif string_test != cond1 and string_test != cond2:
-        graphJSONseason = None
-        graphJSONraw = plotly_kemi(df)
+    if type(df) == list:
+        graphJSONseason = plotly_stoftransport(df)
+        # file_path = io.BytesIO(file['Body'].read())
+        # print(file_path)
+        # new_df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
+        # newsub_df = df.head(1)
+        # newsub_df.pop("År")
+        # newsub_df.pop("Måned")
+        # newsub_df.pop("Resultat")
 
-    return render_template('program/file_results.html', graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
+        # headings = list(newsub_df.columns)
+        # information = list(newsub_df.iloc[0])
+        headings = ['Filbeskrivelse ']
+        information = ['Kommer snart']
+        infolist = zip(headings, information)
+        graphJSONraw = None
+    else:
+        sub_df = df.head(1)
+        sub_df.pop("Resultat")
+        #parameters = str(set(df['Parameter']))
+        #sub_df['Parameter'] = parameters
+        headings = list(sub_df.columns)
+        information = list(sub_df.iloc[0])
+        
+        infolist = zip(headings, information)
+        string_test = str(df['Parameter'].iloc[0])
+        cond1 = 'Vandføring'
+        cond2 = 'Vandstand'
+
+        if string_test == cond1 or string_test == cond2:
+            graphJSONseason = plotly_season(df)
+            graphJSONraw = plotly_hydro(df)
+            graphJSONbar = plotly_bar(df)
+        elif string_test != cond1 and string_test != cond2:
+            graphJSONseason = None
+            graphJSONbar = None
+            graphJSONraw = plotly_kemi(df)
+
+    return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
 
 
 @program.route('/StatQ/kom-godt-i-gang')

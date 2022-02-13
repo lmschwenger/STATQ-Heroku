@@ -4,6 +4,7 @@
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Front" style="color: white; font-size: 2.5vmin">Fil info</a></li>
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rawdata" style="color: white; font-size: 2.5vmin">Målinger</a></li>
       <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasondata" style="color: white; font-size: 2.5vmin">Sæson-værdier</a></li>
+      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistiske-værdier" style="color: white; font-size: 2.5vmin">Statistiske værdier</a></li>
     </ul>
 
     <div class="tab-content">
@@ -42,6 +43,23 @@
               var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
               Plotly.setPlotConfig(config)
               Plotly.plot('seasonplot', graphs, layout, config );
+            </script> 
+          {% endif %}
+        </div>
+      </div>
+      <div id="statistiske-værdier" class="tab-pane fade" style="">
+        <div id="barplot" style="">
+          {% if not graphJSONseason %}
+
+            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Statistisk plot kun til hydrometriske data<h1>
+          {% else %}
+            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+            <script type='text/javascript'>
+              var graphs = {{graphJSONbar | safe}};
+              var layout = { autosize: true };
+              var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
+              Plotly.setPlotConfig(config)
+              Plotly.plot('barplot', graphs, layout, config );
             </script> 
           {% endif %}
         </div>

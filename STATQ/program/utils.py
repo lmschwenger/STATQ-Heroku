@@ -12,6 +12,9 @@ def parse_data(file_path):
         df = pd.read_csv(file_path, encoding = "ISO-8859-1", decimal=',', delimiter=";")
     except EmptyDataError:
         return 'Fejlkode 0: Filen ser ud til at være tom'
+    if '�r' in df.columns or 'År' in df.columns:
+        resampler = parse_data2(df)
+        return resampler
     if 'Dato' in list(df.columns):
         DateName = 'Dato'
     elif 'Startdato' in list(df.columns):
@@ -34,6 +37,41 @@ def parse_data(file_path):
     df.set_index(DateName, inplace=True)
     df.sort_index(inplace=True)
     return df
+
+def parse_data2(df):
+    if '�r' in df.columns:
+        col_year = '�r'
+    elif 'År' in df.columns:
+        col_year = 'År'
+    else:
+        print('Du har formentlig glemt at omdøbe kolonne-navne: De må ikke indeholde æ, ø og å')
+    if 'M�ned' in df.columns:
+        col_maaned = 'M�ned'
+    elif 'Måned' in df.columns:
+        col_maaned = 'Måned'
+    else:
+        print('Du har formentlig glemt at omdøbe kolonne-navne: De må ikke indeholde æ, ø og å')
+
+    resampler = []; values = []
+    years = list( set(df[col_year]) )
+    n = 0
+    for i in range(0,len(df)):
+        if df[col_year][i] == years[n]:
+            values.append({'aar':df[col_year][i], 'Maaned': df[col_maaned][i], 'resultat': df['Resultat'][i]})
+        if df[col_year][i] != years[n] or i == len(df)-1:
+            n_maaneder = len([x['Maaned'] for x in values])
+            if n_maaneder < 12:
+                advarsel = print('OBS: Målinger eksisterer ikke for alle måneder i ' + str(values[0][col_year]))
+            else:
+                advarsel = ''
+            summations = {'aar': df[col_year][i-1], 'n_maaneder': n_maaneder, 'middel':np.mean([x['resultat'] for x in values]), 'samlet':sum([x['resultat'] for x in values]), 'advarsel': advarsel, 'parameter':df['Parameter'][i-1], 'enhed': df['Enhed'][i-1]}
+            
+            resampler.append([values,summations])
+            values = []
+            summations = []
+            values.append({'aar':df[col_year][i], 'Maaned': df[col_maaned][i], 'resultat': df['Resultat'][i]})
+            n+=1
+    return resampler
 
 def plotly_hydro(df):
     Enhed = str(df['Parameter'].iloc[0]) + ', ' + str(df['Enhed'].iloc[0])
@@ -92,38 +130,6 @@ def plotly_kemi(df):
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
-# def plotly_kemi(df):
-#     df['Parameter'] = df['Parameter'] + ' [' + df['Enhed'] + ']'
-#     if 'ObservationsStedNavn' in list(df.columns):
-#         places = list(set(df['ObservationsStedNavn']))
-#         place = str('ObservationsStedNavn')
-#     elif 'ObservationsStedNr' in list(df.columns):
-#         places = list(set(df['ObservationsStedNr']))
-#         place = str('ObservationsStedNr')
-#     parameters= list(set(df['Parameter']))
-#     fig = go.Figure()
-#     for i in range(0,len(places)):
-#         df_place = df.loc[df[place] == str(places[i])]
-#         for j in range(0,len(parameters)):
-#             sub_df = df_place.loc[df_place['Parameter'] == str(parameters[j])]
-#             x = sub_df.index
-#             y = sub_df['Resultat']
-#             if j == 0:
-#                 fig.add_trace(go.Scatter(x = x, y=y, name=str(parameters[j]),
-#                     legendgroup="group"+str(i),
-#                     legendgrouptitle_text=str(places[i]),
-#                     mode="lines+markers"))
-#             else:
-#                 fig.add_trace(go.Scatter(x = x, y=y, name=str(parameters[j]),
-#                     legendgroup="group"+str(i),
-#                     mode="lines+markers"))
-
-#     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
-#     return graphJSON
-
-
-
-
 def plotly_season(df):
     sommer = (df.index.month > 4) & (df.index.month < 10)
     vinter = (df.index.month < 4) + (df.index.month > 10)
@@ -157,6 +163,62 @@ def plotly_season(df):
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+
+def plotly_stoftransport(resampler):
+
+    years = [x[1]['aar'] for x in resampler]
+    y_obs = [x[1]['samlet'] for x in resampler]
+    a, b = np.polyfit(years, y_obs, 1)
+    y_reg = [a * x + b for x in years]
+    r2 = r_squared(y_obs, y_reg)
+    
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(x=years, y=y_obs, name=resampler[0][1]['parameter'], 
+        mode='lines+markers',
+        marker=dict( color='red', size=8, line= dict( color='black', width=2 ) ),
+        line=dict( color='black' )
+            )
+        )
+    fig.add_trace(go.Scatter(x=years, y=y_reg, name = 'Regression (' + str(round(a, 2)) + ', $R^2$ = ' + str(round(r2, 2)),
+        line=dict( color='red', dash='dash' )
+            )
+        )
+    fig.update_layout(autosize=True, title='Stoftransport')
+    fig.update_yaxes(title_text=resampler[0][1]['enhed'])
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
+
+def plotly_bar(df):
+    col_name = 'Resultat'
+    yearly_max = df[col_name].resample('Y').max()
+    yearly_avg = df[col_name].mean()
+    yearly_min = df[col_name].resample('Y').min()
+    
+    median_maks = np.median(yearly_max)        
+    median = np.median(df[col_name])
+    median_min = np.median(yearly_min)
+    
+    
+    vinter = (df.index.month < 4) + (df.index.month > 10)    
+    sommer = (df.index.month > 4) & (df.index.month < 10)  
+    vinter_avg = np.mean(df.loc[vinter, col_name].resample('Y').mean())
+    sommer_avg = np.mean(df.loc[sommer, col_name].resample('Y').mean())
+    
+    output = dict({'Medianmaksimum': median_maks,
+                   'Medianminimum': median_min, 
+                   'Median' : median,
+                   'Årsmiddel' : yearly_avg,
+                   'Vintermiddel': vinter_avg,
+                   'Sommermiddel': sommer_avg})
+    output_items = output.items()
+    output_list = list(output_items)
+    output_df = pd.DataFrame(output_list, columns = ['Parameter', 'Value'])
+    periode = 'Periode: %d - %d' % (min(df.index.year), max(df.index.year))
+
+    fig = px.bar(output_df, x = 'Parameter', y = 'Value', labels = {'Value': str(df['Enhed'][0])})
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
 def mk_test(data):
     data = list(data)
     sign_i = [];
@@ -207,6 +269,18 @@ def mk_test(data):
         Z_MK = 0
     return Z_MK
 
+def r_squared(y_obs, y_reg):
+    import numpy as np
+    residuals = []
+    mean_observed = np.mean(y_obs)
+    if len(y_obs) != len(y_reg):
+        return 'Vektorene er ikke samme længde'
+    else:
+        for i in range(0,len(y_obs)):
+            residuals.append(pow(y_obs[i] - y_reg[i], 2))
+        SS_res = sum(residuals)
+        SS_tot = sum([(y - mean_observed)**2 for y in y_obs])
+    return 1 - (SS_res/SS_tot)
 
 def normdist_p(val,tailed):
     from math import erf
