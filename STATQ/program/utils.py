@@ -192,7 +192,7 @@ def plotly_season(df):
     
     if str(df['Parameter'].iloc[0]) == 'Vandstand':
         fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
-    elif str(df['Parameter'].loc[0] == 'Vandføring'):
+    elif str(df['Parameter'].iloc[0] == 'Vandføring'):
         fig.update_yaxes(title_text=df['Enhed'][0])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
@@ -228,7 +228,6 @@ def plotly_bar(df):
     yearly_max = df[col_name].resample('Y').max()
     yearly_max.dropna(how='all', inplace=True)
     yearly_avg = df[col_name].mean()
-    yearly_avg.dropna(how='all', inplace=True)
     yearly_min = df[col_name].resample('Y').min()
     yearly_min.dropna(how='all', inplace=True)
 
