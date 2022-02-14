@@ -131,6 +131,8 @@ def plotly_hydro(df):
     fig.data = (fig.data[1],fig.data[0])
     if str(df['Parameter'].iloc[0]) == 'Vandstand':
         fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
+    elif str(df['Parameter'].iloc[0]) == 'Vandføring':
+        fig.update_yaxes(title_text=df['Enhed'][0])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
 
     return graphJSON
@@ -170,13 +172,13 @@ def plotly_season(df):
 
     fig = go.Figure()
 
-    fig.add_trace(go.Scatter(x=seasonal_s.index, y=seasonal_s, name=df['Parameter'][0] + ' (Sommer)', 
+    fig.add_trace(go.Scatter(x=seasonal_s.index, y=seasonal_s, name=df['Parameter'][0] + ' (Sommermiddel)', 
         mode='lines+markers',
         marker=dict( color='red', size=8, line= dict( color='black', width=2 ) ),
         line=dict( color='black' )
             )
         )
-    fig.add_trace(go.Scatter(x=seasonal_w.index, y=seasonal_w, name=df['Parameter'][0] + ' (Vinter)', 
+    fig.add_trace(go.Scatter(x=seasonal_w.index, y=seasonal_w, name=df['Parameter'][0] + ' (Vintermiddel)', 
         mode='lines+markers',
         marker_symbol = 'diamond',
         marker=dict( color='blue', size=7, line= dict( color='black', width=2 ) ),
@@ -190,6 +192,8 @@ def plotly_season(df):
     
     if str(df['Parameter'].iloc[0]) == 'Vandstand':
         fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
+    elif str(df['Parameter'].loc[0] == 'Vandføring'):
+        fig.update_yaxes(title_text=df['Enhed'][0])
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
@@ -222,9 +226,12 @@ def plotly_stoftransport(resampler):
 def plotly_bar(df):
     col_name = 'Resultat'
     yearly_max = df[col_name].resample('Y').max()
+    yearly_max.dropna(how='all', inplace=True)
     yearly_avg = df[col_name].mean()
+    yearly_avg.dropna(how='all', inplace=True)
     yearly_min = df[col_name].resample('Y').min()
-    
+    yearly_min.dropna(how='all', inplace=True)
+
     median_maks = np.median(yearly_max)        
     median = np.median(df[col_name])
     median_min = np.median(yearly_min)
@@ -241,6 +248,7 @@ def plotly_bar(df):
                    'Årsmiddel' : yearly_avg,
                    'Vintermiddel': vinter_avg,
                    'Sommermiddel': sommer_avg})
+    print(output)
     output_items = output.items()
     output_list = list(output_items)
     output_df = pd.DataFrame(output_list, columns = ['Parameter', 'Value'])
