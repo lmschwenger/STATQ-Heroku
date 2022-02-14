@@ -1,0 +1,42 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+    <div class="content-section" style="">
+                <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Database </u></h2>
+            <ul id="myMenu" style="list-style-type: none">
+            <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Søg efter station.." style="font-size: 4vmin"title="Type in a category">
+            <div class = "row" style="">
+                <div class ="column" style="float: left; width:50%">
+                    
+                    {% for file in Q_files %}   
+                        <li><a style="font-size:2vmin; margin: 0.5vmin 0" href="{{ url_for('program.station_files', filename=file) }}">{{ file }} </a></li>
+                    {% endfor %}
+                </div>
+        </ul>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#fil-holder").change(function(){
+                document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
+            });
+        });
+    function myFunction() {
+      var input, filter, ul, li, a, i;
+      input = document.getElementById("mySearch");
+      filter = input.value.toUpperCase();
+      ul = document.getElementById("myMenu");
+      li = ul.getElementsByTagName("li");
+      for (i = 0; i < li.length; i++) {
+        a = li[i].getElementsByTagName("a")[0];
+        if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+          li[i].style.display = "";
+        } else {
+          li[i].style.display = "none";
+        }
+      }
+    }
+    </script>
+
+</body>
+{% endblock content %}

@@ -37,6 +37,36 @@ def parse_data(file_path):
     df.set_index(DateName, inplace=True)
     df.sort_index(inplace=True)
     return df
+def parse_databasedata(file_path):
+    try:
+        df = pd.read_csv(file_path, encoding = "utf-8", decimal='.', delimiter=",")
+    except EmptyDataError:
+        return 'Fejlkode 0: Filen ser ud til at være tom'
+    if '�r' in df.columns or 'År' in df.columns:
+        resampler = parse_data2(df)
+        return resampler
+    if 'Dato' in list(df.columns):
+        DateName = 'Dato'
+    elif 'Startdato' in list(df.columns):
+        DateName = 'Startdato'            
+    try:
+        df[DateName] = pd.to_datetime(df[DateName], format='%Y%m%d')
+    except ValueError:
+        return 'Fejlkode 1: Forkert dato-format (se FAQ)'
+    try:
+        df.dropna(subset=['Resultat'], how='all', inplace=True)
+        df.dropna(subset=[DateName], how='all', inplace=True)
+        df['Parameter'].to_string()    
+        df['Resultat'] = pd.to_numeric(df['Resultat'])
+    except KeyError:
+        return 'Fejlkode 2: Filen kan ikke læses (se FAQ)'
+    except ValueError:
+        return 'Fejlkode 1: Forkert dato-format (se FAQ)'
+    if df.empty:
+        return 'Fejlkode 0: Filen ser ud til at være tom'
+    df.set_index(DateName, inplace=True)
+    df.sort_index(inplace=True)
+    return df
 
 def parse_data2(df):
     if '�r' in df.columns:

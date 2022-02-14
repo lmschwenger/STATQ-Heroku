@@ -298,10 +298,8 @@ div.sidebar-content:nth-child(1) {
   position: absolute;
   font-size: 3vmin;
   width: 30vmin;
-  left: 10%;
+  left: 20%;
 
-
-  left: 25%;
 }
 
 
@@ -310,15 +308,26 @@ div.sidebar-content:nth-child(2) {
   position: absolute;
   font-size: 3vmin;
   gap: 2vmin;
-  left: 43.5%;
+  left: 35%;
 }
 div.sidebar-content:nth-child(3) {
   position: absolute;
   font-size: 3vmin;
   width: 30vmin;
   gap: 2vmin;
-  left: 57.5%;
+  left: 45.75%;
 }
+
+div.sidebar-content:nth-child(4) {
+  position: absolute;
+  font-size: 3vmin;
+  width: 30vmin;
+  gap: 2vmin;
+  left: 58.5%;
+}
+}
+
+
 #VideoFrame {
   position: relative;
   width: 25%;
