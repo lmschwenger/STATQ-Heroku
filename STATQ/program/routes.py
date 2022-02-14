@@ -121,6 +121,9 @@ def proces_file(filename):
 @program.route('/StatQ/database/<string:Vandloeb>/<string:filename>', methods=['GET', 'POST'])
 @login_required
 def proces_databasefile(Vandloeb, filename):
+    if filename == '#':
+        flash('De ønskede data findes ikke...', 'danger')
+        return redirect(url_for('program.station_files', filename = Vandloeb))
     form=ProcesFileForm
     file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(filename))
     df = parse_databasedata(io.BytesIO(file['Body'].read()))
@@ -201,26 +204,47 @@ def database():
     filestr = H_path['Body'].read().decode('latin-1')  
     H_files = filestr.split("\n")
     H_files = sorted([x.strip('\r') for x in H_files])
-    print(H_files)
-     #Q_files = pd.read_csv(url_for('static', filename='Q_stationer.txt'), delimiter=',', encoding = "ISO-8859-1")
-    #H_files = pd.read_csv(url_for('static', filename='H_stationer.txt'), delimiter=',', encoding = "ISO-8859-1")
-    #Q_filenames = pd.read_csv(my_bucket + 'Alle Data/Q_stationer.txt')
-    #H_filenames = pd.read_csv(my_bucket + 'Alle Data/H_stationer.txt')
-    #print(Q_files)
+    
     return render_template('program/database.html', Q_filenames = Q_filenames, H_filenames = H_filenames, Q_files = Q_files, H_files = H_files)
 
 
 @program.route('/StatQ/database/<string:filename>')
 def station_files(filename):
+    import itertools
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     files = my_bucket.objects.filter(Prefix=str('Alle Data/')+str(filename) +'/')
+    filnavne=[]
+    Q = []
+    H = []
     stationer=[]
     for objects in files:
+        sep = '_' #The separator fx FLADBRO KRO_VANDFORING.csv.
         obj = objects.key
         obj = obj.removeprefix('Alle Data/'+str(filename)+'/')
         stationer.append(obj)
-    return render_template('program/station_files.html', stationer = stationer, Vandloeb = filename)  
+    one_group = []; grouped = []
+    steder = list(set([x.split('_', 1)[0] for x in stationer]))
+    print(steder)
+    for sted in steder:
+        if str(sted)+'_VANDSTAND.csv' in stationer:
+            H_filename = (sted)+'_VANDSTAND.csv'
+            H_name = ('Vandstand')
+        else:
+            H_name = ('Ingen Vandstand')
+            H_filename = '#'
+        if str(sted)+'_VANDFORING.csv' in stationer:
+            Q_filename =(sted)+'_VANDFORING.csv'
+            Q_name = ('Vandføring')
+        else:
+            Q_name = ('Ingen Vandføring')
+            Q_filename = '#'
+        grouped.append([sted, H_name, H_filename, Q_name, Q_filename])
+
+    # stripped = [x.split('_', 1)[0] for x in stationer]
+    # list_of_sets = list(set(stripped))
+    # grouped = [list(i) for j, i in itertools.groupby(sorted(stationer))]
+    return render_template('program/station_files.html', stationer = stationer, Vandloeb = filename, grouped = grouped)  
 
 @program.route('/StatQ/hjaelp')
 @login_required
