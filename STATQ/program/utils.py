@@ -197,6 +197,126 @@ def plotly_season(df):
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
+def plotly_QH(Q, H):
+    #Preprocessing of dataframes
+    Sted = Q['ObservationsStedNavn'][0]
+    Qgrouped = sort_by_year(Q)
+    Hgrouped = sort_by_year(H)
+
+    Qår = [x['År'] for x in Qgrouped]
+    Hår = [x['År'] for x in Hgrouped]
+
+    overlap = [x for x in Qår if x in Hår]
+    Qoverlap = []; Hoverlap = []
+    
+    for i in range(0, len(Qgrouped)):
+        if Qgrouped[i]['År'] in overlap:
+            Qoverlap.append(Qgrouped[i])
+            
+    for i in range(0, len(Hgrouped)):
+        if Hgrouped[i]['År'] in overlap:
+            Hoverlap.append(Hgrouped[i])
+    
+    all_dates = []
+    
+    for i in range(0, len(Qoverlap)):
+        if len(Qoverlap[i]['Værdi']) > len(Hoverlap[i]['Værdi']):
+            idxOverlap = [str(x) in Hoverlap[i]['Værdi'].index for x in Qoverlap[i]['Værdi'].index]
+            dates = Qoverlap[i]['Værdi'][idxOverlap].index
+        else:
+            idxOverlap = [str(x) in Qoverlap[i]['Værdi'].index for x in Hoverlap[i]['Værdi'].index]
+            dates = Hoverlap[i]['Værdi'][idxOverlap].index
+        all_dates.append(dates)
+    fig = go.Figure()
+
+
+    plotQ = Qoverlap[0]['Værdi'].sort_index().loc[all_dates[0]]
+    plotH = Hoverlap[0]['Værdi'].sort_index().loc[all_dates[0]]
+
+    plotQ2 = Qoverlap[0]['Værdi'].sort_index().loc[all_dates[0]]
+    plotH2 = Hoverlap[0]['Værdi'].sort_index().loc[all_dates[0]]
+
+
+    fig.add_trace(go.Scatter(x=plotQ, y=plotH,
+                              mode='markers',
+                              name=str(Qoverlap[0]['År'])
+                              )
+                  )
+    fig.add_trace(go.Scatter(x=plotQ2, y=plotH2,
+                          mode='markers',
+                          name=str(Qoverlap[0]['År'])
+                          )
+              )
+    fig.update_yaxes(title_text= 'Vandstand [m %s]' % (Hoverlap[0]['Kotesystem']))
+    fig.update_xaxes(title_text= 'Vandføring [%s]' % (Qoverlap[0]['Enhed']))
+
+    buttons1=[]
+
+    for k in range(0, len(Qoverlap)):
+        buttons1.append(dict(method='restyle',
+                            label=Qoverlap[k]['År'],
+                            visible=True,
+                            args=[{'name':Qoverlap[k]['År'], 
+                                   'x':list(np.array([Qoverlap[k]['Værdi'].sort_index().loc[all_dates[k]].values])),
+                                   'y':list(np.array([Hoverlap[k]['Værdi'].sort_index().loc[all_dates[k]].values])), 
+                                   'type':'scatter',
+                                   'yaxis':{'title':'Vandstand [m %s]' % (Hoverlap[k]['Kotesystem'])},
+                                   'xaxis':{'title':'Vandføring [%s]' % (Qoverlap[k]['Enhed'])}
+                                   }, [0]],
+                            )
+                      )
+
+    buttons2=[]
+    for k in range(0, len(Qoverlap)):
+        buttons2.append(dict(method='restyle',
+                            label=Qoverlap[k]['År'],
+                            visible=True,
+                            args=[{'name':Qoverlap[k]['År'], 
+                                   'x':list(np.array([Qoverlap[k]['Værdi'].sort_index().loc[all_dates[k]].values])),
+                                   'y':list(np.array([Hoverlap[k]['Værdi'].sort_index().loc[all_dates[k]].values])), 
+                                   'type':'scatter',
+                                   'yaxis':{'title':'Vandstand [m %s]' % (Hoverlap[k]['Kotesystem'])},
+                                   'xaxis':{'title':'Vandføring [%s]' % (Qoverlap[k]['Enhed'])}
+                                   }, [1]],
+                            )
+                      )
+
+    updatemenu=[]
+    your_menu = dict()
+    updatemenu.append(your_menu)
+    your_menu2 = dict()
+    updatemenu.append(your_menu2)
+    updatemenu[0]['buttons'] = buttons1
+    updatemenu[0]['direction'] = 'down'
+    updatemenu[0]['showactive'] = True
+    updatemenu[0]['y']=1.1
+    updatemenu[0]['x']=0.5
+    updatemenu[1]['buttons'] = buttons2
+    #updatemenu[1]['direction'] = 'down'
+    #updatemenu[1]['showactive'] = True
+    updatemenu[1]['y']=1.1
+    updatemenu[1]['x']=0.75
+    
+    # add dropdown menus to the figure
+    fig.update_layout(showlegend=True, updatemenus=updatemenu)
+    fig.update_layout(autosize=True, title=str(Sted))
+
+    # add notations to the dropdown menus
+    fig.update_layout(
+        annotations=[
+            go.layout.Annotation(text="<b>Plot 1</b>",
+                                 x=0.45, xref="paper",
+                                 y=1.15, yref="paper",
+                                 align="left", showarrow=False),
+            go.layout.Annotation(text="<b>Plot 2</b>",
+                                 x=0.72, xref="paper", 
+                                 y=1.15,
+                                 yref="paper", showarrow=False),
+                      ]
+    )
+
+    graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
+    return graphJSON
 
 def plotly_stoftransport(resampler):
 
@@ -256,6 +376,7 @@ def plotly_bar(df):
     fig = px.bar(output_df, x = 'Parameter', y = 'Value', labels = {'Value': str(df['Enhed'][0])})
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
+
 def mk_test(data):
     data = list(data)
     sign_i = [];
@@ -329,3 +450,37 @@ def normdist_p(val,tailed):
         return 1-cdf
     elif tailed==2:
         return 2*min(cdf,1-cdf)
+
+def sort_by_year(df):
+    #Requires dataframe to be indexed by date.
+    import pandas as pd
+    df_grouped_by_years = []
+    years = list(set(df.index.year))
+    df.sort_index(axis = 0, inplace = True)
+    
+    for year in years:
+        sampler = df[df.index.year == year]['Resultat']
+        enhed = df[df.index.year == year]['Enhed']
+        UTMx = df[df.index.year == year]['Xutm_Euref89_Zone32']
+        UTMy = df[df.index.year == year]['Yutm_Euref89_Zone32']
+        Lokation = df[df.index.year == year]['ObservationsStedNavn']
+        if 'Kotesystem' in df.columns:
+            
+            Kotesystem = df[df.index.year == year]['Kotesystem']
+            df_grouped_by_years.append(dict({'Værdi':sampler, 
+                                           'UTMx':UTMx[0],
+                                           'UTMy':UTMy[0],
+                                           'Enhed':enhed[0], 
+                                           'Kotesystem':Kotesystem[0],
+                                           'Lokation':Lokation[0],
+                                           'År':year}))
+        else:                
+            df_grouped_by_years.append(dict({'Værdi':sampler, 
+                                           'UTMx':UTMx[0],
+                                           'UTMy':UTMy[0],
+                                           'Enhed':enhed[0], 
+                                           'Lokation':Lokation[0],
+                                           'År':year}))
+        sampler=[]
+
+    return df_grouped_by_years

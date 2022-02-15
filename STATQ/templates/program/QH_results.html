@@ -1,0 +1,21 @@
+{% extends "layout.html" %}
+{% block content %}   
+  <ul class="nav nav-pills nav-justified" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw;">
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#QH" style="color: white; font-size: 2.5vmin">QH KURVER</a></li>
+
+  </ul>
+    <div id="QH" class="tab-pane fade"> 
+      <div id="rawplot" class="plot-content" style="border-radius: 0.25vw">
+          <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+          <script type='text/javascript'>
+            var graphs = {{graphJSONQH | safe}};
+            var layout = { autosize: true };
+            var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
+            Plotly.setPlotConfig(config)
+            Plotly.plot('rawplot', graphs, layout, config );
+          </script> 
+      </div>  
+    </div>
+  {% endblock content %}
+
+

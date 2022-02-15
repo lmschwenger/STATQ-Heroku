@@ -11,7 +11,7 @@ import plotly.express as px
 from werkzeug.utils import secure_filename
 from STATQ.program.forms import UploadFileForm, ProcesFileForm
 from STATQ.program.utils import (parse_data,parse_databasedata, 
-                                        plotly_hydro, plotly_kemi, plotly_season, plotly_bar, plotly_stoftransport)
+                                        plotly_hydro, plotly_QH, plotly_kemi, plotly_season, plotly_bar, plotly_stoftransport)
 from STATQ import s3
 import io
 import boto3
@@ -170,6 +170,20 @@ def proces_databasefile(Vandloeb, filename):
 
     return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
 
+@program.route('/StatQ/database/<string:Vandloeb>/QH-kurver/<string:Q_file>/<string:H_file>/', methods=['GET', 'POST'])
+@login_required
+def proces_databaseQH(Vandloeb, Q_file, H_file):
+    if Q_file == '#' or H_file == '#':
+        flash('De ønskede data findes ikke...', 'danger')
+        return redirect(url_for('program.station_files', filename = Vandloeb))
+    form=ProcesFileForm
+    Q_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(Q_file))
+    Q = parse_databasedata(io.BytesIO(Q_file['Body'].read()))
+    H_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(H_file))
+    H = parse_databasedata(io.BytesIO(H_file['Body'].read()))
+    graphJSONQH = plotly_QH(Q, H)
+    return render_template('program/QH_results.html', graphJSONQH = graphJSONQH)
+
 @program.route('/StatQ/kom-godt-i-gang')
 def kom_godt_i_gang():
     return render_template('program/kom-godt-i-gang.html')
@@ -239,12 +253,22 @@ def station_files(filename):
         else:
             Q_name = ('Ingen Vandføring')
             Q_filename = '#'
-        grouped.append([sted, H_name, H_filename, Q_name, Q_filename])
 
+        if Q_filename != '#' and H_filename != '#':
+            QH_name = 'Se QH-kurver'
+        else:
+            if Q_filename == '#':
+                mangel = 'Ingen vandføringsdata'
+            elif H_filename == '#':
+                mangel = 'Ingen vandstandsdata'
+            QH_name = 'QH kurver ikke tilgængelige (%s)' % (mangel)
+        grouped.append([sted, H_name, H_filename, Q_name, Q_filename, QH_name])
     # stripped = [x.split('_', 1)[0] for x in stationer]
     # list_of_sets = list(set(stripped))
     # grouped = [list(i) for j, i in itertools.groupby(sorted(stationer))]
-    return render_template('program/station_files.html', stationer = stationer, Vandloeb = filename, grouped = grouped)  
+    return render_template('program/station_files.html', stationer = stationer, Vandloeb = filename, grouped = grouped, QH_name = QH_name)  
+
+
 
 @program.route('/StatQ/hjaelp')
 @login_required
