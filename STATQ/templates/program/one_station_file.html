@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block content %}
+<body>
+    <div class="content-section" style="">
+                <h2 style="font-size: 5vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> {{ Vandloeb }} </u></h2>
+            {% for station, H_name, H_filename, Q_name, Q_filename, QH_name in grouped %}   
+                        <h3> {{ station }}</h3>
+                        <legend class="file-boxes">{{ H_name }}
+
+                            <button type="button" style="width:  4vw; height: 4vh; font-size:  1vmin; float:right"  onclick="window.location.href='{{ url_for('program.proces_databasefile', filename=H_filename, Vandloeb = Vandloeb) }}'" class = "btn btn-primary" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                                </svg>
+                            </button>
+                        </legend>
+                        <legend class="file-boxes"> {{ Q_name }}
+                            <button type="button" style="width:  4vw; height: 4vh; font-size:  1vmin; float:right"  onclick="window.location.href='{{ url_for('program.proces_databasefile', filename=Q_filename, Vandloeb = Vandloeb) }}'" class = "btn btn-primary" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                                </svg>
+                            </button>
+                        </legend>
+                        <legend class="file-boxes"> {{ QH_name }}
+                            <button type="button" style="width:  4vw; height: 4vh; font-size:  1vmin; float:right"  onclick="window.location.href='{{ url_for('program.proces_databaseQH', Q_file=Q_filename, H_file=H_filename, Vandloeb = Vandloeb) }}'" class = "btn btn-primary" >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="1.8vw" height="1.8vh" fill="currentColor" class="bi bi-graph-up" viewBox="0 0 16 16">
+                                  <path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm14.817 3.113a.5.5 0 0 1 .07.704l-4.5 5.5a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61 4.15-5.073a.5.5 0 0 1 .704-.07Z"/>
+                                </svg>
+                            </button>
+                        </legend>
+            {% endfor %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("#fil-holder").change(function(){
+                document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
+            });
+        });
+    </script>
+</body>
+{% endblock content %}

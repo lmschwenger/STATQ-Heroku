@@ -28,6 +28,9 @@ div.bg-image {
   top: 0;
   z-index: -2;
   opacity: 1;
+  /* Add the blur effect */
+/*  filter: blur(2px);
+  -webkit-filter: blur(2px);*/
 }
 div.blur {
   position: fixed;
@@ -35,7 +38,7 @@ div.blur {
   width: 100vw;
   height: 100vh;
   background-color: black;
-  opacity: .3;
+  opacity: .1;
   z-index: -1;
 }
 span.fake-btn {
@@ -77,12 +80,12 @@ input.file-input {
 #rawplot {
   object-fit: fill;  
   height: 70vh;
-  width: 62.4vw;
+  width: 75.7vw;
 }
 #seasonplot {
   object-fit: fill;  
   height: 70vh;
-  width: 62.4vw;
+  width: 75.7vw;
 }
 
 #left {
@@ -139,7 +142,7 @@ h1, h2, h3, h4, h5, h6 {
   
   text-align: center;
   position: absolute;
-  top: 50%;
+  top: 500%;
   left: 50%;
   transform: translate(-50%, -50%);
   animation-name: blur;
@@ -186,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
 
 @-webkit-keyframes blur {
   from {top: 52vh; opacity: 0}
-  to { opacity: 1; top: 50vh;}
+  to { opacity: 1; top: 60vh;}
 }
 
 .site-header .navbar-nav .nav-link {
@@ -222,8 +225,8 @@ h1, h2, h3, h4, h5, h6 {
   border: 1px solid #dddddd;
   border-radius: .25vw;
   margin-bottom: 1vh;
-  bottom: 2.5vh;
-
+  height: 90vh;
+  width: 75.6vw;
   color: black;
   top: .0vh;
   font-family: Helvetica;
@@ -261,20 +264,32 @@ div.sidebar-header {
   font-size: 5vmin;
   top: -.0vh;
   left: 0vw;
-  background: rgb(176,171,255);
-  background: linear-gradient(60deg, rgba(0,0,0,.0) 00%, rgba(0,0,0,0) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%);
   background: linear-gradient(60deg, rgba(0,133,255,1) 00%, rgba(0,133,255,1) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%); 
   padding-left: 5vw;
   padding-right: 10vw;
   border-radius: 0vw;
+  transition: color .3s ease-in-out, box-shadow .3s ease-in-out;
+
+  transition-delay: .05s; /* delays for 1 second */
 }
+div.sidebar-header:hover{
+  color: blue;
+  opacity: 1;
+  background: linear-gradient(60deg, rgba(0,133,255,0) 00%, rgba(0,133,255,0) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%); 
+  text-decoration: underline;
+  color: white;
+  transition-duration: 1.5s;
+}
+/*
 div.sidebar-header:before{
   content: '';
   position: absolute;
   color: black;
   transition-delay: 1s; /* delays for 1 second */
+  transition: 0.8s;
   -webkit-transition-delay: 1s; /* for Safari & Chrome */ 
   background: linear-gradient(60deg, rgba(0,133,255,0) 00%, rgba(0,133,255,0) 74.5%, rgba(255,255,255,0) 75%, rgba(192,255,252,0) 75.5%); 
+
   position:absolute;
   width:100%;
   top:0;
@@ -284,7 +299,7 @@ div.sidebar-header:before{
   transition-timing-function: ease-out;
 
   z-index:-1;
-}
+}*/
 div.sidebar-header:hover:before {
   width: 0%;
 }
@@ -297,8 +312,8 @@ div.sidebar-content {
 div.sidebar-content:nth-child(1) {
   position: absolute;
   font-size: 3vmin;
-  width: 30vmin;
-  left: 20%;
+  width: 35vmin;
+  left: 23%;
 
 }
 
@@ -308,14 +323,14 @@ div.sidebar-content:nth-child(2) {
   position: absolute;
   font-size: 3vmin;
   gap: 2vmin;
-  left: 35%;
+  left: 42%;
 }
 div.sidebar-content:nth-child(3) {
   position: absolute;
   font-size: 3vmin;
   width: 30vmin;
   gap: 2vmin;
-  left: 45.75%;
+  left: 58.75%;
 }
 
 div.sidebar-content:nth-child(4) {
@@ -470,12 +485,13 @@ div.sidebar-content:nth-child(4) {
 }
 
 .container {
-  display: block;
-
-  left: 18vw;
-  margin-top: 8vh;
-  width: 64vw;
+/*  display: block;*/
+  position: fixed;
+  left: 10vw;
+  padding-top: 9vh;
+  width: 77.2vw;
   max-width: 100vw;
+  padding-bottom: 1vh;
 }
 .tab-content {
   width: 62.4vw;

@@ -5,8 +5,8 @@
                 <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Database </u></h2>
             <ul id="myMenu" style="list-style-type: none">
             <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Søg efter station.." style="font-size: 4vmin"title="Type in a category">
-            <div class = "row" style="">
-                <div class ="column" style="float: left; width:50%">
+            
+                <div class ="content-section" style="float: left; overflow: scroll; width:100%; background-color: transparent; height: 77vh">
                     
                     {% for file in Q_files %}   
                         <li><a style="font-size:2vmin; margin: 0.5vmin 0" href="{{ url_for('program.station_files', filename=file) }}">{{ file }} </a></li>

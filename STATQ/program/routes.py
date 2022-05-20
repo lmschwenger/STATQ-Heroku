@@ -119,8 +119,9 @@ def proces_file(filename):
     return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
 
 @program.route('/StatQ/database/<string:Vandloeb>/<string:filename>', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def proces_databasefile(Vandloeb, filename):
+    filename = filename.split(",")[1][1:].replace(";",",")
     if filename == '#':
         flash('De ønskede data findes ikke...', 'danger')
         return redirect(url_for('program.station_files', filename = Vandloeb))
@@ -171,7 +172,7 @@ def proces_databasefile(Vandloeb, filename):
     return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
 
 @program.route('/StatQ/database/<string:Vandloeb>/QH-kurver/<string:Q_file>/<string:H_file>/', methods=['GET', 'POST'])
-@login_required
+#@login_required
 def proces_databaseQH(Vandloeb, Q_file, H_file):
     if Q_file == '#' or H_file == '#':
         flash('De ønskede data findes ikke...', 'danger')

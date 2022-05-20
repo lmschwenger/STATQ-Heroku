@@ -8,6 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
     {% if title %}
         <title>STATQ - {{ title }}</title>
     {% else %}
@@ -25,23 +26,23 @@
       </div>
       <li class="nav" style="">
         <div class="sidebar-content">
-          <a class="side" href="{{ url_for('program.kom_godt_i_gang') }}">
-            Kom godt i gang
+          <a class="side" href="{{ url_for('GMaps.mapview') }}">
+            Find på Kort
           </a>
         </div>
-        <div class="sidebar-content">
+<!--         <div class="sidebar-content">
           <a class="side" href="{{ url_for('program.your_files') }}">
               Filer
+          </a>
+        </div> -->
+        <div class="sidebar-content">
+          <a class="side" href="{{ url_for('program.database') }}">
+              Databasen
           </a>
         </div>
         <div class="sidebar-content">
           <a class="side" href="{{ url_for('program.help') }}">
               FAQ
-          </a>
-        </div>
-        <div class="sidebar-content">
-          <a class="side" href="{{ url_for('program.database') }}">
-              Databasen
           </a>
         </div>
       </li>
