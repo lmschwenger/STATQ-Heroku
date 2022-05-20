@@ -16,4 +16,4 @@ class Config:
     MAIL_USERNAME = os.environ.get('EMAIL_USER')
     MAIL_PASSWORD = os.environ.get('EMAIL_PASS')
     SECURE_REFERRER_POLICY = "no-referrer-when-downgrade"
-    MAP_API = 'AIzaSyA7Cuj-NpEhBZDxbVlfluJ5-5Zou1ApH1I'
+    MAP_API = os.environ.get('GOOGLEMAPS_API_KEY')
