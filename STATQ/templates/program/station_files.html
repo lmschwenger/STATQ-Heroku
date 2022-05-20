@@ -1,7 +1,7 @@
 {% extends "layout.html" %}
 {% block content %}
 <body>
-    <div class="content-section" style="">
+    <div class="content-section" style="overflow: scroll">
                 <h2 style="font-size: 5vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> {{ Vandloeb }} </u></h2>
             {% for station, H_name, H_filename, Q_name, Q_filename, QH_name in grouped %}   
                         <h3> {{ station }}</h3>
