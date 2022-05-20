@@ -13,7 +13,7 @@ def mapview():
     body = Filsti['Body'].read().decode()
     #print(body)
     marker_liste=[]
-    icon_url='http://maps.google.com/mapfiles/ms/icons/POI.png'
+    icon_url='http://maps.google.com/mapfiles/ms/icons/green-dot.png'
     Firstline = 1
     for lines in body.split("\n"):
         parts = lines.split("\t")
