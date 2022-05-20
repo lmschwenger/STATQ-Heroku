@@ -21,8 +21,7 @@ def mapview():
             try:
                 vandloeb = parts[0]
                 vandloeb_og_sted = parts[1]
-                sted = vandloeb_og_sted.split(';')[1][1:]
-                #print(vandloeb_og_sted.split(';')[1][1:])
+                sted = vandloeb_og_sted.split(',')[1][1:]
                 marker_liste.append(dict({
                     'lat':float(parts[-1]),
                     'lng':float(parts[-2]),
@@ -64,35 +63,46 @@ def station_chosen(vandloeb, valgt_sted):
         obj = obj.removeprefix('Alle Data/'+str(filename)+'/')
         stationer.append(obj)
     one_group = []; grouped = []
-    steder = list(set([x.split('_', 1)[0].replace(",",";") for x in stationer]))
+    steder = list(set([x.split('_', 1)[0] for x in stationer]))
     QH_name = None
     for sted in steder:
         #print(f'{sted} == {valgt_sted}')
-        if sted == valgt_sted or sted.split(";")[1][1:] == valgt_sted: #.split(',')[1][1:]
-            #print(str(sted.split(',')[1:][1:]) + '=' + str(valgt_sted))
-            print(f'{sted}_VANDSTAND.csv')
-            if f'{sted}_VANDSTAND.csv'.replace(";",",") in stationer:
-                H_filename = f'{vandloeb}, {sted}_VANDSTAND.csv'
-                print(f'{vandloeb}, {valgt_sted}_VANDSTAND.csv')
+        if sted.split(',')[1][1:] == valgt_sted: #
+
+            if f'{sted}_VANDSTAND.csv' in stationer:
+                
+                H_filename = f'{vandloeb}, {valgt_sted}_VANDSTAND.csv'
                 H_name = ('Vandstand')
             else:
+
                 H_name = ('Ingen Vandstand')
                 H_filename = '#'
-            if f'{sted}_VANDFORING.csv'.replace(";",",") in stationer:
-                Q_filename = f'{vandloeb}, {sted}_VANDFORING.csv'
-                print(f'{vandloeb}, {valgt_sted}_VANDSTAND.csv')
+            
+            if f'{sted}_VANDFORING.csv' in stationer:
+                
+                Q_filename = f'{vandloeb}, {valgt_sted}_VANDFORING.csv'
+                print(Q_filename)
                 Q_name = ('Vandføring')
+            
             else:
+                
                 Q_name = ('Ingen Vandføring')
                 Q_filename = '#'
 
             if Q_filename != '#' and H_filename != '#':
+               
                 QH_name = 'Se QH-kurver'
+            
             else:
+                
                 if Q_filename == '#':
+                
                     mangel = 'Ingen vandføringsdata'
+                
                 elif H_filename == '#':
+                    
                     mangel = 'Ingen vandstandsdata'
+               
                 QH_name = 'QH kurver ikke tilgængelige (%s)' % (mangel)
     try:
         stednavn = valgt_sted.split(';')[1][:]

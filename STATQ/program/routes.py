@@ -121,7 +121,8 @@ def proces_file(filename):
 @program.route('/StatQ/database/<string:Vandloeb>/<string:filename>', methods=['GET', 'POST'])
 #@login_required
 def proces_databasefile(Vandloeb, filename):
-    sted = filename.split(",")[1][1:].replace(";",",")
+    sted = filename
+    print(sted)
     #filename = filename.split(",")[1][1:].replace(";",",")
     #print(filename)
     if filename == '#':
