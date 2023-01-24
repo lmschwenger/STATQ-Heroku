@@ -30,4 +30,4 @@ tenacity==8.0.1
 Werkzeug==2.0.2
 WTForms==2.3.3
 boto3==1.19.5
-flask-googlemaps==4.4.8
+flask-googlemaps==0.4.0
