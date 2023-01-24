@@ -121,12 +121,15 @@ def proces_file(filename):
 @program.route('/StatQ/database/<string:Vandloeb>/<string:filename>', methods=['GET', 'POST'])
 #@login_required
 def proces_databasefile(Vandloeb, filename):
-    filename = filename.split(",")[1][1:].replace(";",",")
+    sted = filename
+    print(sted)
+    #filename = filename.split(",")[1][1:].replace(";",",")
+    #print(filename)
     if filename == '#':
         flash('De ønskede data findes ikke...', 'danger')
         return redirect(url_for('program.station_files', filename = Vandloeb))
     form=ProcesFileForm
-    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(filename))
+    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(sted))
     df = parse_databasedata(io.BytesIO(file['Body'].read()))
     if isinstance(df, str):
         flash(df, 'danger')
@@ -174,6 +177,7 @@ def proces_databasefile(Vandloeb, filename):
 @program.route('/StatQ/database/<string:Vandloeb>/QH-kurver/<string:Q_file>/<string:H_file>/', methods=['GET', 'POST'])
 #@login_required
 def proces_databaseQH(Vandloeb, Q_file, H_file):
+
     if Q_file == '#' or H_file == '#':
         flash('De ønskede data findes ikke...', 'danger')
         return redirect(url_for('program.station_files', filename = Vandloeb))

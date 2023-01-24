@@ -123,11 +123,7 @@ def plotly_hydro(df):
         mode='lines+markers',
         marker=dict( color='black', size=8, line= dict( color='black', width=2 ))))
     fig.update_xaxes(title_text="")
-    if 'ObservationsStedNavn' in list(df.columns):
-        if len(set(df['ObservationsStedNavn'])) > 1 and 'Lokalitetsnavn' in list(df.columns):
-            fig.update_layout(autosize=True, title=df['Lokalitetsnavn'].iloc[0])  
-    else:
-        fig.update_layout(autosize=True, title='Målestation(er): '+ str(set(df['ObservationsStedNr'])).strip("'{}'"))
+    fig.update_layout(autosize=True, title=str(set(df['ObservationsStedNavn'])).strip("'{}'"))
     fig.data = (fig.data[1],fig.data[0])
     if str(df['Parameter'].iloc[0]) == 'Vandstand':
         fig.update_yaxes(title_text=df['Enhed'][0] + ' ' + df['Kotesystem'][0])
@@ -374,6 +370,7 @@ def plotly_bar(df):
     periode = 'Periode: %d - %d' % (min(df.index.year), max(df.index.year))
 
     fig = px.bar(output_df, x = 'Parameter', y = 'Value', labels = {'Value': str(df['Enhed'][0])})
+    fig.update_layout(autosize=True, title=str(set(df['ObservationsStedNavn'])).strip("'{}'"))
     graphJSON = json.dumps(fig, cls=plotly.utils.PlotlyJSONEncoder)
     return graphJSON
 
