@@ -1,25 +1,29 @@
 {% extends "layout.html" %}
-{% block content %}   
-    <ul class="nav nav-pills nav-justified" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw;">
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Front" style="color: white; font-size: 2.5vmin">Fil info</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rawdata" style="color: white; font-size: 2.5vmin">Målinger</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasondata" style="color: white; font-size: 2.5vmin">Sæson-værdier</a></li>
-      <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistiske-værdier" style="color: white; font-size: 2.5vmin">Statistisk</a></li>
-    </ul>
+{% block content %}
+<ul class="nav nav-pills nav-justified" style="  background-color: rgba(1,1,1, 0.25); border-radius: .25vw;">
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#Front" style="color: white; font-size: 2.5vmin">Fil
+        info</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#rawdata" style="color: white; font-size: 2.5vmin">Målinger</a>
+    </li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#seasondata"
+                            style="color: white; font-size: 2.5vmin">Sæson-værdier</a></li>
+    <li class="nav-item"><a class="nav-link" data-toggle="tab" href="#statistiske-værdier"
+                            style="color: white; font-size: 2.5vmin">Statistisk</a></li>
+</ul>
 
-    <div class="tab-content">
-      <div id="Front" class="tab-pane fade" >
+<div class="tab-content">
+    <div class="tab-pane fade" id="Front">
         <div class="content-section">
-          <p>
-          {% for heading,value in infolist %}
-            
+            <p>
+                {% for heading,value in infolist %}
+
             <p style="font-size: 2vmin"><b>{{ heading }}:</b> {{ value }}</p>
-          {% endfor %}
-          </p>
+            {% endfor %}
+            </p>
         </div>
-      </div>
-      <div id="rawdata" class="tab-pane fade"> 
-        <div id="rawplot" class="plot-content" style="border-radius: 0.25vw">
+    </div>
+    <div class="tab-pane fade" id="rawdata">
+        <div class="plot-content" id="rawplot" style="border-radius: 0.25vw">
             <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
             <script type='text/javascript'>
               var graphs = {{graphJSONraw | safe}};
@@ -27,44 +31,52 @@
               var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
               Plotly.setPlotConfig(config)
               Plotly.plot('rawplot', graphs, layout, config );
-            </script> 
-        </div>  
-      </div>
-      <div id="seasondata" class="tab-pane fade" style="">
-        <div id="seasonplot" style="">
-          {% if not graphJSONseason %}
 
-            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Sæson-plot kun til hydrometriske data<h1>
-          {% else %}
-            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-            <script type='text/javascript'>
+
+            </script>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="seasondata" style="">
+        <div id="seasonplot" style="">
+            {% if not graphJSONseason %}
+
+            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Sæson-plot kun til hydrometriske data
+                <h1>
+                    {% else %}
+                    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                    <script type='text/javascript'>
               var graphs = {{graphJSONseason | safe}};
               var layout = { autosize: true };
               var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
               Plotly.setPlotConfig(config)
               Plotly.plot('seasonplot', graphs, layout, config );
-            </script> 
-          {% endif %}
-        </div>
-      </div>
-      <div id="statistiske-værdier" class="tab-pane fade" style="">
-        <div id="barplot" class="plot-content" style="">
-          {% if not graphJSONseason %}
 
-            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Statistisk plot kun til hydrometriske data<h1>
-          {% else %}
-            <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
-            <script type='text/javascript'>
+
+                    </script>
+                    {% endif %}
+        </div>
+    </div>
+    <div class="tab-pane fade" id="statistiske-værdier" style="">
+        <div class="plot-content" id="barplot" style="">
+            {% if not graphJSONseason %}
+
+            <h1 style="background-color: white; pad: 2vw border-radius: 10vw">Statistisk plot kun til hydrometriske data
+                <h1>
+                    {% else %}
+                    <script src='https://cdn.plot.ly/plotly-latest.min.js'></script>
+                    <script type='text/javascript'>
               var graphs = {{graphJSONbar | safe}};
               var layout = { autosize: true };
               var config = { responsive: true, 'displaylogo': false, modeBarButtonsToRemove: ['hoverClosestCartesian', 'hoverCompareCartesian', 'toggleSpikelines'], 'displayModeBar': true};
               Plotly.setPlotConfig(config)
               Plotly.plot('barplot', graphs, layout, config );
-            </script> 
-          {% endif %}
+
+
+                    </script>
+                    {% endif %}
         </div>
-      </div>
     </div>
-  {% endblock content %}
+</div>
+{% endblock content %}
 
 

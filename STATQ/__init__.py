@@ -1,14 +1,18 @@
-from flask import Flask, session
-from flask_sqlalchemy import SQLAlchemy
-from flask_bcrypt import Bcrypt
-from flask_login import LoginManager
-from flask_mail import Mail
-from flask_googlemaps import GoogleMaps
-from STATQ.config import Config
-import boto3
 import os
 from datetime import timedelta
-s3 = boto3.client('s3', aws_access_key_id = os.environ.get('AWS_ACCESS_KEY_ID'), aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
+
+import boto3
+from flask import Flask, session
+from flask_bcrypt import Bcrypt
+from flask_googlemaps import GoogleMaps
+from flask_login import LoginManager
+from flask_mail import Mail
+from flask_sqlalchemy import SQLAlchemy
+
+from STATQ.config import Config
+
+s3 = boto3.client('s3', aws_access_key_id=os.environ.get('AWS_ACCESS_KEY_ID'),
+                  aws_secret_access_key=os.environ.get('AWS_SECRET_ACCESS_KEY'))
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -40,8 +44,10 @@ def create_app(config_class=Config):
     app.register_blueprint(errors)
     app.register_blueprint(program)
     app.register_blueprint(GMaps)
+
     @app.before_request
     def before_request():
         session.permanent = True
         app.permanent_session_lifetime = timedelta(minutes=30)
+
     return app

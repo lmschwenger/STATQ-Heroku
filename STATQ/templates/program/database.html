@@ -1,21 +1,25 @@
 {% extends "layout.html" %}
 {% block content %}
 <body>
-    <div class="content-section" style="">
-                <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro"> Database </u></h2>
-            <ul id="myMenu" style="list-style-type: none">
-            <input type="text" id="mySearch" onkeyup="myFunction()" placeholder="Søg efter station.." style="font-size: 4vmin"title="Type in a category">
-            
-                <div class ="content-section" style="float: left; overflow: scroll; width:100%; background-color: transparent; height: 77vh">
-                    
-                    {% for file in Q_files %}   
-                        <li><a style="font-size:2vmin; margin: 0.5vmin 0" href="{{ url_for('program.station_files', filename=file) }}">{{ file }} </a></li>
-                    {% endfor %}
-                </div>
-        </ul>
-    </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-    <script>
+<div class="content-section" style="">
+    <h2 style="font-size: 3vmin;"><u style="color: #004b8d; font-weight: bold; text-decoration-color:gainsboro">
+        Database </u></h2>
+    <ul id="myMenu" style="list-style-type: none">
+        <input id="mySearch" onkeyup="myFunction()" placeholder="Søg efter station.." style="font-size: 4vmin"
+               title="Type in a category" type="text">
+
+        <div class="content-section"
+             style="float: left; overflow: scroll; width:100%; background-color: transparent; height: 77vh">
+
+            {% for file in Q_files %}
+            <li><a href="{{ url_for('program.station_files', filename=file) }}"
+                   style="font-size:2vmin; margin: 0.5vmin 0">{{ file }} </a></li>
+            {% endfor %}
+        </div>
+    </ul>
+</div>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script>
         $(document).ready(function(){
             $("#fil-holder").change(function(){
                 document.getElementById("Span-id").innerHTML = document.getElementById("fil-holder").files[0].name;
@@ -36,7 +40,9 @@
         }
       }
     }
-    </script>
+
+
+</script>
 
 </body>
 {% endblock content %}

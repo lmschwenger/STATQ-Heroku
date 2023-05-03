@@ -1,16 +1,18 @@
-from datetime import timedelta  
-from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app, session
+import os
+
+from flask import render_template, url_for, flash, redirect, request, Blueprint, current_app
 from flask_login import login_user, current_user, logout_user, login_required
+
 from STATQ import db, bcrypt
 from STATQ.models import User
 from STATQ.users.forms import (RegistrationForm, LoginForm, UpdateAccountForm,
-                                   RequestResetForm, ResetPasswordForm)
+                               RequestResetForm, ResetPasswordForm)
 from STATQ.users.utils import send_reset_email
-import os
 
 users = Blueprint('users', __name__)
 
-#program = Blueprint('program', __name__)
+
+# program = Blueprint('program', __name__)
 
 @users.route("/register", methods=['GET', 'POST'])
 def register():
@@ -48,6 +50,7 @@ def logout():
     logout_user()
     return redirect(url_for('main.home'))
 
+
 @users.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
@@ -56,9 +59,9 @@ def account():
         current_user.username = form.username.data
         current_user.email = form.email.data
         db.session.commit()
-        new_path = current_app.root_path+'/static/files/'+current_user.username+'/'
+        new_path = current_app.root_path + '/static/files/' + current_user.username + '/'
         try:
-            os.rename(old_path, new_path)       
+            os.rename(old_path, new_path)
         except FileExistsError:
             pass
         flash('Din konto er nu opdateret!', 'success')
@@ -67,6 +70,7 @@ def account():
         form.username.data = current_user.username
         form.email.data = current_user.email
     return render_template('account.html', title='Account', form=form)
+
 
 @users.route("/nulstil_kodeord", methods=['GET', 'POST'])
 def reset_request():

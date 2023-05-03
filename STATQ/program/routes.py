@@ -1,35 +1,31 @@
+import io
+import os
+
+import boto3
 from flask import render_template, request, Blueprint, redirect, current_app, flash, url_for
 from flask_login import login_required, current_user
-import pandas as pd
-import os
-from os import listdir
-from os.path import isfile, join
-import numpy as np
-import secrets
-import plotly
-import plotly.express as px
 from werkzeug.utils import secure_filename
-from STATQ.program.forms import UploadFileForm, ProcesFileForm
-from STATQ.program.utils import (parse_data,parse_databasedata, 
-                                        plotly_hydro, plotly_QH, plotly_kemi, plotly_season, plotly_bar, plotly_stoftransport)
+
 from STATQ import s3
-import io
-import boto3
+from STATQ.program.forms import ProcesFileForm
+from STATQ.program.utils import (parse_data, parse_databasedata,
+                                 plotly_hydro, plotly_QH, plotly_kemi, plotly_season, plotly_bar, plotly_stoftransport)
 
 program = Blueprint('program', __name__)
+
 
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
 def upload_file():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
-    filenames=[]
+    files = my_bucket.objects.filter(Prefix=str(current_user.username) + "/")
+    filenames = []
     for objects in files:
         obj = objects.key
-        obj = obj.removeprefix(str(current_user.username)+'/')
+        obj = obj.removeprefix(str(current_user.username) + '/')
         filenames.append(obj)
-    user_folder = current_user.username+'/'
+    user_folder = current_user.username + '/'
 
     if request.files:
         file = request.files['myFile']
@@ -44,36 +40,38 @@ def upload_file():
         else:
             filename = secure_filename(file.filename)
         try:
-            s3.upload_fileobj(file, 'statq-bucket', str(user_folder)+str(filename))
+            s3.upload_fileobj(file, 'statq-bucket', str(user_folder) + str(filename))
         except Exception as e:
-            flash("Noget gik galt: "+e, 'danger')
-        #s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
+            flash("Noget gik galt: " + e, 'danger')
+        # s3_resource.meta.client.upload_file(str(file.filename), 'statq-bucket',str(user_folder)+str(filename))
         flash("Fil er uploadet", 'success')
         return redirect(url_for('program.your_files'))
 
     return render_template('program/proces_file.html', files=files, filenames=filenames)
+
 
 @program.route('/StatQ/dine-filer/', methods=['GET', 'POST'])
 @login_required
 def your_files():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    files = my_bucket.objects.filter(Prefix=str(current_user.username)+"/")
+    files = my_bucket.objects.filter(Prefix=str(current_user.username) + "/")
     return render_template('program/proces_file.html', files=files, filepaths=filepaths)
 
 
 @program.route('/StatQ/dine-filer/<string:filename>/slet-fil')
 @login_required
 def delete_file(filename):
-    s3.delete_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username)+'/'+str(filename))
-    flash(str(filename)+" er blevet slettet", 'success')
-    return redirect(url_for('program.your_files'))   
+    s3.delete_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username) + '/' + str(filename))
+    flash(str(filename) + " er blevet slettet", 'success')
+    return redirect(url_for('program.your_files'))
+
 
 @program.route('/StatQ/dine-filer/<string:filename>', methods=['GET', 'POST'])
 @login_required
 def proces_file(filename):
-    form=ProcesFileForm
-    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username)+'/'+str(filename))
+    form = ProcesFileForm
+    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str(current_user.username) + '/' + str(filename))
     df = parse_data(io.BytesIO(file['Body'].read()))
     if isinstance(df, str):
         flash(df, 'danger')
@@ -97,11 +95,11 @@ def proces_file(filename):
     else:
         sub_df = df.head(1)
         sub_df.pop("Resultat")
-        #parameters = str(set(df['Parameter']))
-        #sub_df['Parameter'] = parameters
+        # parameters = str(set(df['Parameter']))
+        # sub_df['Parameter'] = parameters
         headings = list(sub_df.columns)
         information = list(sub_df.iloc[0])
-        
+
         infolist = zip(headings, information)
         string_test = str(df['Parameter'].iloc[0])
         cond1 = 'Vandføring'
@@ -116,20 +114,23 @@ def proces_file(filename):
             graphJSONbar = None
             graphJSONraw = plotly_kemi(df)
 
-    return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
+    return render_template('program/file_results.html', graphJSONbar=graphJSONbar, graphJSONraw=graphJSONraw,
+                           graphJSONseason=graphJSONseason, form=form, infolist=infolist, filename=filename)
+
 
 @program.route('/StatQ/database/<string:Vandloeb>/<string:filename>', methods=['GET', 'POST'])
-#@login_required
+# @login_required
 def proces_databasefile(Vandloeb, filename):
     sted = filename
     print(sted)
-    #filename = filename.split(",")[1][1:].replace(";",",")
-    #print(filename)
+    # filename = filename.split(",")[1][1:].replace(";",",")
+    # print(filename)
     if filename == '#':
         flash('De ønskede data findes ikke...', 'danger')
-        return redirect(url_for('program.station_files', filename = Vandloeb))
-    form=ProcesFileForm
-    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(sted))
+        return redirect(url_for('program.station_files', filename=Vandloeb))
+    form = ProcesFileForm
+    file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'),
+                         Key=str('Alle Data/') + str(Vandloeb) + '/' + str(sted))
     df = parse_databasedata(io.BytesIO(file['Body'].read()))
     if isinstance(df, str):
         flash(df, 'danger')
@@ -153,11 +154,11 @@ def proces_databasefile(Vandloeb, filename):
     else:
         sub_df = df.head(1)
         sub_df.pop("Resultat")
-        #parameters = str(set(df['Parameter']))
-        #sub_df['Parameter'] = parameters
+        # parameters = str(set(df['Parameter']))
+        # sub_df['Parameter'] = parameters
         headings = list(sub_df.columns)
         information = list(sub_df.iloc[0])
-        
+
         infolist = zip(headings, information)
         string_test = str(df['Parameter'].iloc[0])
         cond1 = 'Vandføring'
@@ -172,88 +173,94 @@ def proces_databasefile(Vandloeb, filename):
             graphJSONbar = None
             graphJSONraw = plotly_kemi(df)
 
-    return render_template('program/file_results.html', graphJSONbar = graphJSONbar, graphJSONraw = graphJSONraw, graphJSONseason = graphJSONseason, form=form, infolist=infolist, filename = filename)
+    return render_template('program/file_results.html', graphJSONbar=graphJSONbar, graphJSONraw=graphJSONraw,
+                           graphJSONseason=graphJSONseason, form=form, infolist=infolist, filename=filename)
+
 
 @program.route('/StatQ/database/<string:Vandloeb>/QH-kurver/<string:Q_file>/<string:H_file>/', methods=['GET', 'POST'])
-#@login_required
+# @login_required
 def proces_databaseQH(Vandloeb, Q_file, H_file):
-
     if Q_file == '#' or H_file == '#':
         flash('De ønskede data findes ikke...', 'danger')
-        return redirect(url_for('program.station_files', filename = Vandloeb))
-    form=ProcesFileForm
-    Q_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(Q_file))
+        return redirect(url_for('program.station_files', filename=Vandloeb))
+    form = ProcesFileForm
+    Q_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'),
+                           Key=str('Alle Data/') + str(Vandloeb) + '/' + str(Q_file))
     Q = parse_databasedata(io.BytesIO(Q_file['Body'].read()))
-    H_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/') + str(Vandloeb)+'/'+str(H_file))
+    H_file = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'),
+                           Key=str('Alle Data/') + str(Vandloeb) + '/' + str(H_file))
     H = parse_databasedata(io.BytesIO(H_file['Body'].read()))
     graphJSONQH = plotly_QH(Q, H)
-    return render_template('program/QH_results.html', graphJSONQH = graphJSONQH)
+    return render_template('program/QH_results.html', graphJSONQH=graphJSONQH)
+
 
 @program.route('/StatQ/kom-godt-i-gang')
 def kom_godt_i_gang():
     return render_template('program/kom-godt-i-gang.html')
 
+
 @program.route('/StatQ/database')
-#@login_required
+# @login_required
 def database():
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
     Q_files = my_bucket.objects.filter(Prefix="/Alle Data/Q/")
-    Q_filenames=[]
+    Q_filenames = []
     for objects in Q_files:
         obj = objects.key
         obj = obj.removeprefix('/')
         Q_filenames.append(obj)
     H_files = my_bucket.objects.filter(Prefix="/Alle Data/H/")
-    H_filenames=[]
+    H_filenames = []
     for objects in H_files:
         obj = objects.key
         obj = obj.removeprefix('/')
         H_filenames.append(obj)
         print(H_filenames)
     s3 = boto3.client('s3')
-    
+
     Q_path = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/Q_stationer.txt'))
-   
-    filestr = Q_path['Body'].read().decode('latin-1')  
+
+    filestr = Q_path['Body'].read().decode('latin-1')
     Q_files = filestr.split("\n")
     Q_files = sorted([x.strip('\r') for x in Q_files])
-    
+
     H_path = s3.get_object(Bucket=os.environ.get('S3_BUCKET_NAME'), Key=str('Alle Data/Q_stationer.txt'))
-    filestr = H_path['Body'].read().decode('latin-1')  
+    filestr = H_path['Body'].read().decode('latin-1')
     H_files = filestr.split("\n")
     H_files = sorted([x.strip('\r') for x in H_files])
-    
-    return render_template('program/database.html', Q_filenames = Q_filenames, H_filenames = H_filenames, Q_files = Q_files, H_files = H_files)
+
+    return render_template('program/database.html', Q_filenames=Q_filenames, H_filenames=H_filenames, Q_files=Q_files,
+                           H_files=H_files)
 
 
 @program.route('/StatQ/database/<string:filename>')
 def station_files(filename):
-    import itertools
     s3_resource = boto3.resource('s3')
     my_bucket = s3_resource.Bucket(os.environ.get('S3_BUCKET_NAME'))
-    files = my_bucket.objects.filter(Prefix=str('Alle Data/')+str(filename) +'/')
-    filnavne=[]
+    files = my_bucket.objects.filter(Prefix=str('Alle Data/') + str(filename) + '/')
+    filnavne = []
     Q = []
     H = []
-    stationer=[]
+    stationer = []
     for objects in files:
-        sep = '_' #The separator fx FLADBRO KRO_VANDFORING.csv.
+        sep = '_'  # The separator fx FLADBRO KRO_VANDFORING.csv.
         obj = objects.key
-        obj = obj.removeprefix('Alle Data/'+str(filename)+'/')
+        obj = obj.removeprefix('Alle Data/' + str(filename) + '/')
         stationer.append(obj)
-    one_group = []; grouped = []
+    one_group = [];
+    grouped = []
     steder = list(set([x.split('_', 1)[0] for x in stationer]))
     print(steder)
     for sted in steder:
-        if str(sted)+'_VANDSTAND.csv' in stationer:
-            H_filename = (sted)+'_VANDSTAND.csv'
+        if str(sted) + '_VANDSTAND.csv' in stationer:
+            H_filename = (sted) + '_VANDSTAND.csv'
             H_name = ('Vandstand')
         else:
             H_name = ('Ingen Vandstand')
             H_filename = '#'
-        if str(sted)+'_VANDFORING.csv' in stationer:
-            Q_filename =(sted)+'_VANDFORING.csv'
+        if str(sted) + '_VANDFORING.csv' in stationer:
+            Q_filename = (sted) + '_VANDFORING.csv'
             Q_name = ('Vandføring')
         else:
             Q_name = ('Ingen Vandføring')
@@ -271,14 +278,14 @@ def station_files(filename):
     # stripped = [x.split('_', 1)[0] for x in stationer]
     # list_of_sets = list(set(stripped))
     # grouped = [list(i) for j, i in itertools.groupby(sorted(stationer))]
-    return render_template('program/station_files.html', stationer = stationer, Vandloeb = filename, grouped = grouped, QH_name = QH_name)  
-
+    return render_template('program/station_files.html', stationer=stationer, Vandloeb=filename, grouped=grouped,
+                           QH_name=QH_name)
 
 
 @program.route('/StatQ/hjaelp')
-@login_required
 def help():
     return render_template('program/help.html')
+
 
 def allowed_filetype(filename):
     if not "." in filename:

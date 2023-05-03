@@ -1,11 +1,12 @@
 import os
 
+
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY')
     try:
-       SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://','postgresql://') 
+        SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
     except:
-       'sqlite:///site.db'
+        'sqlite:///site.db'
     AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
     AWS_BUCKET_NAME = os.environ.get('S3_BUCKET_NAME')

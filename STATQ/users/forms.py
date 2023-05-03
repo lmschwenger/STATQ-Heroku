@@ -1,8 +1,8 @@
+from flask_login import current_user
 from flask_wtf import FlaskForm
-from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_login import current_user
+
 from STATQ.models import User
 
 
@@ -54,6 +54,7 @@ class UpdateAccountForm(FlaskForm):
             if user:
                 raise ValidationError('Denne email er allerede i brug. Vælg venligst en anden.')
 
+
 class RequestResetForm(FlaskForm):
     email = StringField('Email',
                         validators=[DataRequired(), Email()])
@@ -63,6 +64,7 @@ class RequestResetForm(FlaskForm):
         user = User.query.filter_by(email=email.data).first()
         if user is None:
             raise ValidationError('Der findes ingen bruger med denne email.')
+
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Kodeord', validators=[DataRequired()])
